@@ -4,20 +4,25 @@
  */
 package com.espol.app.contactos.modelo;
 
-
-import com.espol.app.contactos.utilidades.List;
-import java.io.Serializable;
-
 /**
  *
  * @author mfalvarez
  */
-public class Usuario implements Serializable{
-    String user;
-    String password;
-    List<Contacto> contactos;
-    
-    
+public class Foto {
+    private String url;
 
+    public Foto(String url) {
+        this.url = url;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+    
+    
     
 }

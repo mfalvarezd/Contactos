@@ -4,6 +4,8 @@
  */
 package com.espol.app.contactos.utilidades;
 
+import java.util.Comparator;
+
 /**
  *
  * @author mfalvarez
@@ -42,4 +44,6 @@ public interface List<E> extends Iterable<E> {
     public List<E> subList(int from, int to);
     
     public List<E> removeFirstNElements (int n);
+    
+    public List<E> findIntersection (List<E> anotherList, Comparator<E> cmp);
 }
