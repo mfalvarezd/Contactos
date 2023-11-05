@@ -9,35 +9,25 @@ import java.util.Iterator;
 
 /**
  *
- * @author mfalvarez
- * @param <E>
+ * @author ander
  */
-public class DoubleLinkedList<E> implements List<E> {
+public class DoubleCircularLinkedList<E> implements List<E>{
     
-    private Node header,last;
+    private Node last;
 
-    public DoubleLinkedList(Node header, Node last) {
-         this.header=this.last=null;
-    }
-    
     @Override
     public int size() {
-        int cont = 0;
-        Node n;
-        for (n = this.header; n!= null; n = n.getNext()) {
-            cont++;
-        }
-        return cont;
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public boolean isEmpty() {
-        return (header == null && last == null);
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public void clear() {
-        
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
@@ -103,6 +93,5 @@ public class DoubleLinkedList<E> implements List<E> {
     @Override
     public Iterator<E> iterator() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-    
+    }    
 }
