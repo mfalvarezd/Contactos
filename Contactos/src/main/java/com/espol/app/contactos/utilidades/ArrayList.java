@@ -13,6 +13,15 @@ import java.util.Iterator;
  * @param <E>
  */
 public class ArrayList<E> implements List<E> {
+    private E[] elements;
+    private int CAPACITY = 100;
+    private int effectiveSize;
+
+    public ArrayList() {
+        elements = (E[]) new Object[CAPACITY];
+        effectiveSize = 0;
+    }
+    
 
     @Override
     public int size() {
