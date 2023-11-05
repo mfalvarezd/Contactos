@@ -5,6 +5,7 @@
 package com.espol.app.contactos.modelo;
 
 
+import com.espol.app.contactos.utilidades.ArrayList;
 import com.espol.app.contactos.utilidades.List;
 import java.io.Serializable;
 
@@ -13,9 +14,50 @@ import java.io.Serializable;
  * @author mfalvarez
  */
 public class Usuario implements Serializable{
+    private String nombre;
     String user;
     String password;
     List<Contacto> contactos;
+
+    public Usuario(String user, String password,String nombre) {
+        this.user = user;
+        this.password = password;
+        this.nombre=nombre;
+        contactos = new ArrayList<>();
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public List<Contacto> getContactos() {
+        return contactos;
+    }
+
+    public void setContactos(List<Contacto> contactos) {
+        this.contactos = contactos;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+    
     
     
 

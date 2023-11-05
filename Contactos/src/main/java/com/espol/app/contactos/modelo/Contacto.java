@@ -5,13 +5,14 @@
 package com.espol.app.contactos.modelo;
 
 import com.espol.app.contactos.utilidades.List;
+import java.io.Serializable;
 
 /**
  *
  * @author mfalvarez
  * @param <T>
  */
-public class Contacto<T> {
+public class Contacto<T> implements Serializable{
 
     private List<Atributo<T>> atributos;
     private List<Foto> fotos;

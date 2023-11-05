@@ -4,12 +4,14 @@
  */
 package com.espol.app.contactos.modelo;
 
+import java.io.Serializable;
+
 /**
  *
  * @author mfalvarez
  * @param <T>
  */
-public class Atributo<T> {
+public class Atributo<T> implements Serializable{
 
     private String nombre;
     private T valor;

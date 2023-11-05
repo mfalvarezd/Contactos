@@ -5,13 +5,14 @@
 package com.espol.app.contactos.modelo;
 
 import com.espol.app.contactos.utilidades.List;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  *
  * @author mfalvarez
  */
-public class Persona extends Contacto{
+public class Persona extends Contacto implements Serializable{
     private String apellidos;
     private Date bday;
 

@@ -4,11 +4,13 @@
  */
 package com.espol.app.contactos.modelo;
 
+import java.io.Serializable;
+
 /**
  *
  * @author mfalvarez
  */
-public enum Tipo {
+public enum Tipo implements Serializable {
     TELEFONO,FECHA,DIRECCION,CORREO;
     
 }

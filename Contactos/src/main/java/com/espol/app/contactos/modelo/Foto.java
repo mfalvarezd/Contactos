@@ -4,11 +4,13 @@
  */
 package com.espol.app.contactos.modelo;
 
+import java.io.Serializable;
+
 /**
  *
  * @author mfalvarez
  */
-public class Foto {
+public class Foto implements Serializable{
     private String url;
 
     public Foto(String url) {
