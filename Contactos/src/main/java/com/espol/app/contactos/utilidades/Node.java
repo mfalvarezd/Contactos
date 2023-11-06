@@ -13,7 +13,13 @@ public class Node<E> {
     private Node<E> next;
     private Node<E> previous;
 
-    public Node() {
+    public Node(){
+    }
+    
+    public Node(E element) {
+        this.element = element;
+        this.next = this;
+        this.previous= this;
     }
 
     public Node(E element, Node<E> next, Node<E> previous) {

@@ -1,5 +1,8 @@
 package com.espol.app.contactos;
 
+import com.espol.app.contactos.utilidades.*;
+
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -7,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Iterator;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -19,15 +23,42 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {        
+        /*
         scene = new Scene(loadFXML("primary"), 338, 588);
         stage.setScene(scene);
-        stage.setTitle("Contactos");
-        
-        Image imagen = new Image("file:imagenes\\logo.png");        
-        
+        stage.setTitle("Contactos");        
+        Image imagen = new Image("file:imagenes\\logo.png");                
         stage.getIcons().add(imagen);
-        
+        */
         stage.show();
+        System.out.println("Hola xd");
+        DoubleCircularLinkedList<Integer> link = new DoubleCircularLinkedList<Integer>();
+        link.addLast(1);
+        link.addLast(2);
+        link.addLast(3);
+        link.addLast(4);
+        link.addLast(5);
+        link.addLast(6);
+        
+        System.out.println(link.isEmpty());
+        System.out.println(link.size());
+        Iterator it = link.iterator();
+        while(it.hasNext()){
+            System.out.println(it.next());
+        }
+        
+        
+        link.removeLast();
+        link.removeLast();
+        link.removeLast();
+        link.removeLast();
+        link.removeLast();
+        link.removeLast();
+        
+        
+        System.out.println(link.isEmpty());
+        System.out.println(link.size());
+        System.out.println(link.toString());
         
         
     }
