@@ -25,52 +25,144 @@ public class ArrayList<E> implements List<E> {
 
     @Override
     public int size() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return effectiveSize;
     }
 
     @Override
     public boolean isEmpty() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return effectiveSize == 0;
     }
 
     @Override
     public void clear() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        E[] newElements = (E[]) new Object[CAPACITY];
+        elements = newElements;
+        effectiveSize = 0;          
     }
 
     @Override
     public boolean addFirst(E element) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        if (element == null) {
+            return false;
+        } else if (this.isEmpty()) {
+            elements[effectiveSize++] = element;            
+            return true;
+        } else if (this.isFull()) {
+            this.addCapacity();
+        }
+        
+        //bit shifting
+        for (int i=effectiveSize-1; i>=0; i--){
+            elements[i+1] = elements[i];
+        }
+        elements[0] = element;
+        effectiveSize++;        
+        return true;   
     }
+    
+    private void addCapacity() {
+        CAPACITY*=2;
+        E[] newElements = (E[])new Object[CAPACITY];
+        
+        for (int i=0; i<elements.length; i++) {
+            newElements[i] = elements[i];
+        }        
+        elements = newElements;        
+    }
+    
+    private boolean isFull() {
+        return effectiveSize == CAPACITY;
+    }    
 
     @Override
     public boolean addLast(E element) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        if (element == null) {
+            return false;
+        } else if (this.isEmpty()) {
+            elements[effectiveSize++] = element;
+            return true;
+        } else if (this.isFull()) {
+            this.addCapacity();
+        }
+        
+        elements[effectiveSize] = element;
+        effectiveSize++;
+        return true;        
     }
 
     @Override
     public E removeFirst() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        if (this.isEmpty()) {
+            return null;
+        }
+        E element = elements[0];
+        for (int i=0; i<effectiveSize-1; i++) {
+            elements[i] = elements[i+1];
+        }
+        effectiveSize--;
+        return element;        
     }
 
     @Override
     public E removeLast() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        if (this.isEmpty()) {
+            return null;
+        }
+        E element = elements[effectiveSize-1];
+        E[] newElements = (E[]) new Object[CAPACITY];
+        
+        for (int i=0; i<effectiveSize-1; i++){
+            newElements[i] = elements[i];
+        }
+        
+        elements = newElements;
+        effectiveSize--;
+        return element;        
     }
 
     @Override
     public boolean add(int index, E element) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        if (element == null) {
+            System.out.println("No es posible agregar el elemento");
+            return false;
+        } else if (this.isEmpty()) {
+            return false;
+            //throw new IOException("HEY PELIGRO!!!!!");
+            //System.out.println("El indice esta fuera del alcanze del ArrayList");
+            //return false;
+        } else if (index>effectiveSize) {
+            throw new ArrayIndexOutOfBoundsException();
+        } else if (this.isFull()){      
+            this.addCapacity();
+        }
+        for (int i=effectiveSize-1; i>=index; i--) {
+            elements[i+1]=elements[i];
+        }
+        elements[index] = element;
+        effectiveSize++;
+        return true;         
     }
 
     @Override
     public E remove(int index) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        if (this.isEmpty()) {
+            return null;
+        } else if (index>(effectiveSize-1)) {
+            System.out.println("El indice esta fuera del alcanze del ArrayList");
+            return null;
+        }
+        E element = elements[index];
+                        
+        for (int i=index; i<effectiveSize-1; i++){
+            elements[i] = elements[i+1];
+        }
+        effectiveSize--;
+        return element;        
     }
 
     @Override
     public E get(int index) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return elements[index];        
     }
 
     @Override
@@ -94,13 +186,28 @@ public class ArrayList<E> implements List<E> {
     }
 
     @Override
-    public Iterator<E> iterator() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
     public List<E> findIntersection(List<E> anotherList, Comparator<E> cmp) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
+    
+    @Override
+    public Iterator<E> iterator() {
+        Iterator<E> it = new Iterator<E>(){
+            int cursor = 0;
+            
+            @Override
+            public boolean hasNext() {
+                return this.cursor<effectiveSize;                
+            }
+
+            @Override
+            public E next() {
+                E element = elements[cursor];
+                cursor++;
+                return element;
+            }
+        };
+        return it;        
+    }    
     
 }

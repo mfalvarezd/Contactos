@@ -9,7 +9,8 @@ import java.util.Iterator;
 
 /**
  *
- * @author ander
+ * @author carfgonz
+ * @param <E>
  */
 public class DoubleCircularLinkedList<E> implements List<E>{
     
