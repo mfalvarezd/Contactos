@@ -9,7 +9,7 @@ import java.util.Iterator;
 
 /**
  *
- * @author mfalvarez
+ * @author carfgonz
  * @param <E>
  */
 public class ArrayList<E> implements List<E> {
@@ -22,7 +22,6 @@ public class ArrayList<E> implements List<E> {
         effectiveSize = 0;
     }
     
-
     @Override
     public int size() {
         return effectiveSize;
@@ -127,9 +126,6 @@ public class ArrayList<E> implements List<E> {
             return false;
         } else if (this.isEmpty()) {
             return false;
-            //throw new IOException("HEY PELIGRO!!!!!");
-            //System.out.println("El indice esta fuera del alcanze del ArrayList");
-            //return false;
         } else if (index>effectiveSize) {
             throw new ArrayIndexOutOfBoundsException();
         } else if (this.isFull()){      
@@ -196,14 +192,14 @@ public class ArrayList<E> implements List<E> {
             int cursor = 0;
             
             @Override
-            public boolean hasNext() {
+            public boolean hasNext() {                
                 return this.cursor<effectiveSize;                
             }
 
             @Override
-            public E next() {
+            public E next() {                
                 E element = elements[cursor];
-                cursor++;
+                cursor++;                
                 return element;
             }
         };

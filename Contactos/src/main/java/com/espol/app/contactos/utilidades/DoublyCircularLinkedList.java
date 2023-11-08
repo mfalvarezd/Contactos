@@ -12,11 +12,11 @@ import java.util.Iterator;
  * @author carfgonz
  * @param <E>
  */
-public class DoubleCircularLinkedList<E> implements List<E>{
+public class DoublyCircularLinkedList<E> implements List<E>{
     
     private Node<E> last;
 
-    public DoubleCircularLinkedList() {
+    public DoublyCircularLinkedList() {
         this.last = null;
     }
 
@@ -127,22 +127,95 @@ public class DoubleCircularLinkedList<E> implements List<E>{
 
     @Override
     public boolean add(int index, E element) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        Node<E> newNode = new Node(element);
+        Node<E> cursor = this.last;
+        
+        if (index>this.size()-1) {
+            return false;
+        }
+        
+        if (element == null) {
+            return false;
+        }
+        
+        if (index == 0) {            
+            return this.addFirst(element);
+        }
+        
+        if (index == this.size()-1) {            
+            return this.addLast(element);
+        }
+
+        for (int i=0; i<index; i++) {
+            cursor = cursor.getNext();
+        }
+        
+        newNode.setPrevious(cursor);
+        newNode.setNext(cursor.getNext());
+        cursor.getNext().getNext().setPrevious(newNode);
+        cursor.setNext(newNode);        
+        
+        return true;                
     }
 
     @Override
     public E remove(int index) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        Node<E> cursor = this.last;
+        E element = null;
+        
+        if (index == 0) {
+            element = this.removeFirst();
+            return element;
+        }
+        
+        if (index == this.size()-1) {
+            element = this.removeLast();
+            return element;
+        }
+        
+        if (index>this.size()-1) {
+            return element;
+        }
+        
+        for (int i=0; i<index; i++) {
+            cursor = cursor.getNext();
+        }
+        element = cursor.getNext().getElement();
+        cursor.getNext().getNext().setPrevious(cursor);
+        cursor.setNext(cursor.getNext().getNext());        
+        return element;
+        
     }
 
     @Override
-    public E get(int index) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public E get(int index) {        
+        Node<E> cursor = last.getNext();
+        
+        if (index>this.size()-1) {
+            return null;
+        }
+        
+        for (int i=0; i<index; i++) {
+            cursor = cursor.getNext();
+        }
+        
+        return cursor.getElement();        
     }
 
     @Override
     public E set(int index, E element) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        Node<E> cursor = last.getNext();
+        
+        if (index>this.size()-1) {
+            return null;
+        }
+        
+        for (int i=0; i<index; i++) {
+            cursor = cursor.getNext();
+        }
+        E elementOld = cursor.getElement();
+        cursor.setElement(element);
+        return elementOld;
     }
 
     @Override
@@ -168,22 +241,18 @@ public class DoubleCircularLinkedList<E> implements List<E>{
     @Override
     public Iterator<E> iterator() {
         Iterator<E> it = new Iterator<E>(){
-            Node<E> cursor = last;
-            
+            int count = 0;
+            Node<E> cursor = last.getNext();
             @Override
-            public boolean hasNext() {
-                
-                System.out.println("dentro del has"+cursor.getElement());
-                return cursor!=null;
+            public boolean hasNext() {                             
+                return count<size();
             }
 
             @Override
-            public E next() {
+            public E next() {                
                 E elemento = cursor.getElement();
-                System.out.println("DENTRO DEL NEXT"+elemento);
                 cursor = cursor.getNext();
-                System.out.println("Luego del ++"+cursor.getElement());
-                
+                count++;
                 return elemento;
             }
         };
@@ -191,26 +260,15 @@ public class DoubleCircularLinkedList<E> implements List<E>{
     }
     
     public String toString() {
-        String linea = "";
+        String linea = "[";
         if (!this.isEmpty()) {
-            Iterator<E> it = this.iterator();
+            Iterator<E> it = this.iterator();            
             while (it.hasNext()) {
                 linea+=it.next()+", ";            
-            }               
+            }
+            linea = linea.substring(0, linea.length()-2);
+            linea+="]";
         }
-        /*
-            if(!this.isEmpty()) {
-                Node<E> n = this.getLast();
-                n = n.getNext();
-                linea+=n.getElement()+", ";                
-        
-            while(n!=this.getLast()) {
-                n=n.getNext();
-                linea+=n.getElement()+", ";
-            }        
-            return linea;  
-        }
-        */
         return linea;        
     }
 }

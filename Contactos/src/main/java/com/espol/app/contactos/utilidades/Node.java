@@ -50,7 +50,5 @@ public class Node<E> {
 
     public void setPrevious(Node<E> previous) {
         this.previous = previous;
-    }
-    
-    
+    }        
 }
