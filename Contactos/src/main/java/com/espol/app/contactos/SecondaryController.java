@@ -30,7 +30,8 @@ public class SecondaryController implements Initializable{
     @FXML
     private void agregar() throws IOException {
         System.out.println("HOLA MUNDO");
-        Button button1 = new Button("Botón A");
+        App.setRoot("aggContacts");
+        //Button button1 = new Button("Botón A");
         
         /*
         for (int i=0; i<10; i++){

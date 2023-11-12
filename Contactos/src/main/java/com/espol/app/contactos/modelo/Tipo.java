@@ -11,6 +11,6 @@ import java.io.Serializable;
  * @author mfalvarez
  */
 public enum Tipo implements Serializable {
-    TELEFONO,FECHA,DIRECCION,CORREO;
+    TELEFONO,FECHA,DIRECCION,CORREO,REDSOCIAL;
     
 }
