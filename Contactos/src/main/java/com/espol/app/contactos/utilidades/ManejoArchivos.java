@@ -49,7 +49,7 @@ public class ManejoArchivos {
 
             try {
                 ObjectInputStream ob = new ObjectInputStream(new FileInputStream(ficheroEntrada));
-                usuarios.addLast((Usuario) ob.readObject());
+                usuarios.add((Usuario) ob.readObject());
                 ob.close();
             } catch (IOException | ClassNotFoundException ex) {
 

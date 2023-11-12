@@ -73,7 +73,7 @@ public class DoublyCircularLinkedList<E> implements List<E>{
     }
 
     @Override
-    public boolean addLast(E element) {
+    public boolean add(E element) {
         Node<E> node = new Node<E>(element);
         if (this.isEmpty()) {
             this.last = node;
@@ -143,7 +143,7 @@ public class DoublyCircularLinkedList<E> implements List<E>{
         }
         
         if (index == this.size()-1) {            
-            return this.addLast(element);
+            return this.add(element);
         }
 
         for (int i=0; i<index; i++) {

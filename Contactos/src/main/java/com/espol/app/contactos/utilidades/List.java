@@ -21,7 +21,7 @@ public interface List<E> extends Iterable<E> {
 
     public boolean addFirst(E element); // inserta el elemento element al inicio
 
-    public boolean addLast(E element); // inserta el elemento element al final
+    public boolean add(E element); // inserta el elemento element al final
 
     public E removeFirst(); // remueve el elemento al inicio de la lista
 

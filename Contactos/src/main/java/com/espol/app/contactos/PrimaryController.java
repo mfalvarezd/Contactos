@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -73,13 +74,16 @@ public class PrimaryController implements Initializable{
         pw2.setMaxWidth(250);
         Label lblmr = new Label();
         lblmr.setVisible(false);
+        
         Button btnRegistrarse = new Button("Registrarse");
+        Button btnSalir = new Button("Salir");
+        Button btnVolver = new Button("Volver");
+        
         Label lblNombre = new Label("Ingrese un Nombre y Apellido");
         TextField tfNombre = new TextField();
         tfNombre.setMaxWidth(250);
         pContenido.getChildren().addAll(lblRegistro, lblUsuario, tFuser, lblPassword, pw, lblpw, pw2, lblNombre, tfNombre, lblmr, btnRegistrarse);
-        Button btnSalir = new Button("Salir");
-        Button btnVolver = new Button("Volver");
+
         btnRegistrarse.setOnAction(ev -> {
             if (ManejoArchivos.validarUsuario(tFuser.getText())) {
                 lblmr.setVisible(true);
@@ -105,7 +109,8 @@ public class PrimaryController implements Initializable{
 
             }
 
-        });
+        });       
+        
         btnVolver.setOnAction(ev -> {
             try {
                 App.setRoot("primary");
@@ -115,6 +120,8 @@ public class PrimaryController implements Initializable{
         });
         btnSalir.setOnAction(ev -> System.exit(0));
         buttonBox.getChildren().addAll(btnSalir, btnVolver);
-
+        buttonBox.setSpacing(100);                
+        
+        pContenido.getChildren().addAll(buttonBox);        
     }
 }

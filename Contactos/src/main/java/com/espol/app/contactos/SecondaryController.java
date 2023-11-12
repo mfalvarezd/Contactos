@@ -1,5 +1,8 @@
 package com.espol.app.contactos;
 
+import com.espol.app.contactos.modelo.Atributo;
+import com.espol.app.contactos.modelo.Contacto;
+import com.espol.app.contactos.modelo.Usuario;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -24,13 +27,14 @@ public class SecondaryController implements Initializable{
     private Button visualizar;
 
     @Override
-    public void initialize(URL url, ResourceBundle rb) {        
+    public void initialize(URL url, ResourceBundle rb) {
+        
     }
 
     @FXML
     private void agregar() throws IOException {
         System.out.println("HOLA MUNDO");
-        App.setRoot("aggContacts");
+        App.setRoot("aggContacts");        
         //Button button1 = new Button("Botón A");
         
         /*

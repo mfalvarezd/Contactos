@@ -6,6 +6,7 @@ package com.espol.app.contactos.modelo;
 
 
 import com.espol.app.contactos.utilidades.ArrayList;
+import com.espol.app.contactos.utilidades.DoublyCircularLinkedList;
 import com.espol.app.contactos.utilidades.List;
 import java.io.Serializable;
 
@@ -19,11 +20,11 @@ public class Usuario implements Serializable{
     String password;
     List<Contacto> contactos;
 
-    public Usuario(String user, String password,String nombre) {
+    public Usuario(String user, String password, String nombre) {
         this.user = user;
         this.password = password;
         this.nombre=nombre;
-        contactos = new ArrayList<>();
+        contactos = new DoublyCircularLinkedList<>();
     }
 
     public String getUser() {

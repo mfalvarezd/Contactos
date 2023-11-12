@@ -74,7 +74,7 @@ public class ArrayList<E> implements List<E> {
     }    
 
     @Override
-    public boolean addLast(E element) {
+    public boolean add(E element) {
         if (element == null) {
             return false;
         } else if (this.isEmpty()) {
@@ -206,4 +206,11 @@ public class ArrayList<E> implements List<E> {
         return it;        
     }    
     
+    public List<E> convertArrayList(E[] arreglo) {
+        List<E> newArreglo = new ArrayList<>();
+        for (int i=0; i<arreglo.length; i++) {
+            newArreglo.add(arreglo[i]);
+        }
+        return newArreglo;
+    }
 }

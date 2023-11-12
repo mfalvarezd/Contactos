@@ -7,116 +7,127 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<ScrollPane fx:id="scrollPane" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="580.0" prefWidth="350.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.espol.app.contactos.AggContactsController">
-    
-   <content>
-      <VBox fx:id="contentPrincipal" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1178.0" prefWidth="347.0" spacing="10.0">
-         <children>
-            <HBox fx:id="default1" alignment="TOP_CENTER" prefHeight="26.0" prefWidth="343.0" spacing="220.0">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="588.0" prefWidth="338.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.espol.app.contactos.AggContactsController">
+   <children>
+      <ScrollPane fx:id="scrollPane" layoutX="-2.0" layoutY="-5.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="596.0" prefWidth="345.0">
+         <content>
+            <VBox fx:id="contentPrincipal" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="591.0" prefWidth="343.0" spacing="10.0">
                <children>
-                  <Button fx:id="btnCancelar" alignment="CENTER" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" prefHeight="26.0" prefWidth="70.0" text="Cancelar" />
-                  <Button fx:id="btnListo" mnemonicParsing="false" prefHeight="26.0" prefWidth="66.0" text="Listo" />
-               </children>
-               <VBox.margin>
-                  <Insets />
-               </VBox.margin>
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-            </HBox>
-            <HBox fx:id="default2" alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-               <children>
-                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                  <HBox fx:id="default1" alignment="TOP_CENTER" prefHeight="26.0" prefWidth="343.0" spacing="180.0">
                      <children>
-                        <ImageView fx:id="imgFoto" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../../../icons/usuario.png" />
-                           </image></ImageView>
-                        <Button fx:id="btnAgregarFoto" mnemonicParsing="false" text="Agregar foto" />
+                        <Button fx:id="btnCancelar" alignment="CENTER" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#regresar" prefHeight="26.0" prefWidth="94.0" text="Cancelar" />
+                        <Button fx:id="btnListo" mnemonicParsing="false" prefHeight="26.0" prefWidth="66.0" text="Listo" />
+                     </children>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                  </HBox>
+                  <HBox fx:id="default2" alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                           <children>
+                              <ImageView fx:id="imgFoto" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../../../icons/usuario.png" />
+                                 </image>
+                              </ImageView>
+                              <Button fx:id="btnAgregarFoto" mnemonicParsing="false" text="Agregar foto" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <VBox fx:id="default3" prefHeight="79.0" prefWidth="343.0" spacing="10.0">
+                     <children>
+                        <TextField fx:id="tfNombre" onAction="#ingresoNombre" promptText="Nombre" />
+                        <TextField fx:id="tftApellido" onAction="#ingresoApellido" promptText="Apellidos" />
+                        <TextField fx:id="tfEmpresa" onAction="#ingresoEmpresa" promptText="Empresa" />
+                     </children>
+                  </VBox>
+                  <VBox fx:id="contentTelf" prefHeight="40.0" prefWidth="343.0">
+                     <children>
+                        <HBox prefHeight="28.0" prefWidth="343.0">
+                           <children>
+                              <ImageView fitHeight="26.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../../../icons/mas.png" />
+                                 </image>
+                              </ImageView>
+                              <Button fx:id="btnTelf" alignment="TOP_LEFT" contentDisplay="CENTER" mnemonicParsing="false" onAction="#aggTelf" prefHeight="22.0" prefWidth="318.0" text="Agregar telefono" />
+                           </children>
+                        </HBox>
+                     </children>
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
+                  </VBox>
+                  <VBox fx:id="contentCorreo" prefHeight="41.0" prefWidth="343.0">
+                     <children>
+                        <HBox prefHeight="28.0" prefWidth="343.0">
+                           <children>
+                              <ImageView fitHeight="26.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../../../icons/mas.png" />
+                                 </image>
+                              </ImageView>
+                              <Button fx:id="btnCorreo" alignment="TOP_LEFT" contentDisplay="CENTER" mnemonicParsing="false" onAction="#aggCorreo" prefHeight="22.0" prefWidth="318.0" text="Agregar correo" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <VBox fx:id="contentDic" prefHeight="40.0" prefWidth="343.0">
+                     <children>
+                        <HBox prefHeight="28.0" prefWidth="343.0">
+                           <children>
+                              <ImageView fitHeight="26.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../../../icons/mas.png" />
+                                 </image>
+                              </ImageView>
+                              <Button fx:id="btnDic" alignment="TOP_LEFT" contentDisplay="CENTER" mnemonicParsing="false" onAction="#aggDic" prefHeight="22.0" prefWidth="318.0" text="Agregar direccion" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <VBox fx:id="contentFecha" prefHeight="42.0" prefWidth="343.0">
+                     <children>
+                        <HBox prefHeight="28.0" prefWidth="343.0">
+                           <children>
+                              <ImageView fitHeight="26.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../../../icons/mas.png" />
+                                 </image>
+                              </ImageView>
+                              <Button fx:id="btnFecha" alignment="TOP_LEFT" contentDisplay="CENTER" mnemonicParsing="false" onAction="#aggFecha" prefHeight="22.0" prefWidth="318.0" text="Agregar fecha" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <VBox fx:id="contentRedSocial" prefHeight="58.0" prefWidth="343.0">
+                     <children>
+                        <HBox prefHeight="28.0" prefWidth="343.0">
+                           <children>
+                              <ImageView fitHeight="26.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../../../icons/mas.png" />
+                                 </image>
+                              </ImageView>
+                              <Button fx:id="btnRedSocial" alignment="TOP_LEFT" contentDisplay="CENTER" mnemonicParsing="false" onAction="#aggRedSocial" prefHeight="22.0" prefWidth="318.0" text="Agregar Red Social" />
+                           </children>
+                        </HBox>
                      </children>
                   </VBox>
                </children>
-            </HBox>
-            <VBox fx:id="default3" prefHeight="79.0" prefWidth="343.0">
-               <children>
-                  <TextField fx:id="tfNombre" onAction="#ingresoNombre" promptText="Nombre" />
-                  <TextField fx:id="tftApellido" onAction="#ingresoApellido" promptText="Apellidos" />
-                  <TextField fx:id="tfEmpresa" onAction="#ingresoEmpresa" promptText="Empresa" />
-               </children>
+               <padding>
+                  <Insets left="10.0" right="10.0" top="10.0" />
+               </padding>
             </VBox>
-            <VBox fx:id="contentTelf" prefHeight="40.0" prefWidth="343.0">
-               <children>
-                  <HBox prefHeight="28.0" prefWidth="343.0">
-                     <children>
-                        <ImageView fitHeight="26.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../../../icons/mas.png" />
-                           </image>
-                        </ImageView>
-                        <Button fx:id="btnTelf" alignment="TOP_LEFT" contentDisplay="CENTER" mnemonicParsing="false" onAction="#aggTelf" prefHeight="22.0" prefWidth="318.0" text="Agregar telefono" />
-                     </children>
-                  </HBox>
-               </children>
-            </VBox>
-            <VBox fx:id="contentCorreo" prefHeight="41.0" prefWidth="343.0">
-               <children>
-                  <HBox prefHeight="28.0" prefWidth="343.0">
-                     <children>
-                        <ImageView fitHeight="26.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../../../icons/mas.png" />
-                           </image>
-                        </ImageView>
-                        <Button fx:id="btnCorreo" alignment="TOP_LEFT" contentDisplay="CENTER" mnemonicParsing="false" onAction="#aggCorreo" prefHeight="22.0" prefWidth="318.0" text="Agregar correo" />
-                     </children>
-                  </HBox>
-               </children>
-            </VBox>
-            <VBox fx:id="contentDic" prefHeight="40.0" prefWidth="343.0">
-               <children>
-                  <HBox prefHeight="28.0" prefWidth="343.0">
-                     <children>
-                        <ImageView fitHeight="26.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../../../icons/mas.png" />
-                           </image>
-                        </ImageView>
-                        <Button fx:id="btnDic" alignment="TOP_LEFT" contentDisplay="CENTER" mnemonicParsing="false" onAction="#aggDic" prefHeight="22.0" prefWidth="318.0" text="Agregar direccion" />
-                     </children>
-                  </HBox>
-               </children>
-            </VBox>
-            <VBox fx:id="contentFecha" prefHeight="42.0" prefWidth="343.0">
-               <children>
-                  <HBox prefHeight="28.0" prefWidth="343.0">
-                     <children>
-                        <ImageView fitHeight="26.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../../../icons/mas.png" />
-                           </image>
-                        </ImageView>
-                        <Button fx:id="btnFecha" alignment="TOP_LEFT" contentDisplay="CENTER" mnemonicParsing="false" onAction="#aggFecha" prefHeight="22.0" prefWidth="318.0" text="Agregar fecha" />
-                     </children>
-                  </HBox>
-               </children>
-            </VBox>
-            <VBox fx:id="contentRedSocial" prefHeight="58.0" prefWidth="343.0">
-               <children>
-                  <HBox prefHeight="28.0" prefWidth="343.0">
-                     <children>
-                        <ImageView fitHeight="26.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../../../icons/mas.png" />
-                           </image>
-                        </ImageView>
-                        <Button fx:id="btnRedSocial" alignment="TOP_LEFT" contentDisplay="CENTER" mnemonicParsing="false" onAction="#aggRedSocial" prefHeight="22.0" prefWidth="318.0" text="Agregar Red Social" />
-                     </children>
-                  </HBox>
-               </children>
-            </VBox>
-         </children>
-      </VBox>
-   </content>
-</ScrollPane>
+         </content>
+      </ScrollPane>
+   </children>
+</Pane>

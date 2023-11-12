@@ -5,6 +5,7 @@
 package com.espol.app.contactos;
 
 //import com.espol.app.contactos.utilidades.List;
+import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Collections;
@@ -285,5 +286,10 @@ public class AggContactsController implements Initializable {
      private void ajustarAlturaVBox() {
         contentPrincipal.setPrefHeight(contentPrincipal.getPrefHeight() + 50); // Ajusta según sea necesario
     }
+     
+    @FXML
+    private void regresar() throws IOException {
+        App.setRoot("secondary2");
+    }    
 
 }
