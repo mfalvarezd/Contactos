@@ -44,6 +44,9 @@ public class Persona extends Contacto implements Serializable{
     public void setBday(Date bday) {
         this.bday = bday;
     }
+
+    public Persona() {
+    }
     
     
 }

@@ -20,7 +20,10 @@ public class Empresa extends Contacto implements Serializable{
     public Empresa(List atributos, List fotos) {
         super(atributos, fotos);
     }
-    
+
+    public Empresa() {
+    }
+   
 
     
 }
