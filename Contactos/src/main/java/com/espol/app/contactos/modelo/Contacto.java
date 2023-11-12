@@ -70,5 +70,8 @@ public class Contacto<T> implements Serializable{
         this.atributos = atributos;
         this.fotos = fotos;
     }
+    public Contacto(){
+        
+    }
 
 }
