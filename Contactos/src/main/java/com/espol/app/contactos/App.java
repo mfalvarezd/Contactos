@@ -1,12 +1,8 @@
 package com.espol.app.contactos;
 
-import com.espol.app.contactos.modelo.Atributo;
-import com.espol.app.contactos.modelo.Contacto;
-import com.espol.app.contactos.modelo.Foto;
-import com.espol.app.contactos.modelo.Persona;
-import com.espol.app.contactos.modelo.Tipo;
+
+
 import com.espol.app.contactos.modelo.Usuario;
-import com.espol.app.contactos.utilidades.*;
 
 
 import javafx.application.Application;
@@ -16,10 +12,8 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.Date;
-import java.util.Iterator;
+
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 
 /**
  * JavaFX App

@@ -7,8 +7,7 @@ package com.espol.app.contactos;
 //import com.espol.app.contactos.utilidades.List;
 import com.espol.app.contactos.modelo.Atributo;
 import com.espol.app.contactos.modelo.Contacto;
-import com.espol.app.contactos.modelo.Empresa;
-import com.espol.app.contactos.modelo.Persona;
+
 import com.espol.app.contactos.modelo.Tipo;
 import com.espol.app.contactos.modelo.Usuario;
 import com.espol.app.contactos.utilidades.ArrayList;
