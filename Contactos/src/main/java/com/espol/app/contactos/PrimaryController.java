@@ -136,6 +136,14 @@ public class PrimaryController implements Initializable{
 
     @FXML
     private void salir(ActionEvent event) {
-         System.exit(0);
+        if(usuarioLogeado!=null){
+        usuarioLogeado = SecondaryController.userLogIn;
+        ManejoArchivos.guardarDatos(usuarioLogeado);
+        System.out.println(usuarioLogeado.getContactos());
+        System.exit(0);
+        }else{
+            System.exit(0);
+        }
+        
     }
 }

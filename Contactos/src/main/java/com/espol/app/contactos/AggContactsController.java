@@ -5,10 +5,14 @@
 package com.espol.app.contactos;
 
 //import com.espol.app.contactos.utilidades.List;
+import com.espol.app.contactos.modelo.Atributo;
 import com.espol.app.contactos.modelo.Contacto;
 import com.espol.app.contactos.modelo.Empresa;
 import com.espol.app.contactos.modelo.Persona;
+import com.espol.app.contactos.modelo.Tipo;
 import com.espol.app.contactos.modelo.Usuario;
+import com.espol.app.contactos.utilidades.ArrayList;
+import com.espol.app.contactos.utilidades.ManejoArchivos;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
@@ -20,6 +24,7 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
@@ -95,7 +100,7 @@ public class AggContactsController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        usuarioLogeado=PrimaryController.usuarioLogeado;
+        usuarioLogeado = PrimaryController.usuarioLogeado;
 
         // TODO
         tfNombre.setOnKeyPressed(event -> {
@@ -220,30 +225,19 @@ public class AggContactsController implements Initializable {
             tfEtiqueta.setMaxWidth(60);
             TextField calle1 = new TextField();
             calle1.setPromptText("Calle 1");
-            TextField calle2 = new TextField();
-            calle2.setPromptText("Calle 2");
-            TextField calleP = new TextField();
-            calleP.setPromptText("Calle principal");
-            TextField ciudad = new TextField();
-            ciudad.setPromptText("Ciudad");
-            TextField pais = new TextField();
-            pais.setPromptText("Pais");
-            HBox hb1= new HBox(new Label("Pais "),pais);
-            
-            
-//            // Obtener una lista de códigos de países
-//            String[] countryCodes = Locale.getISOCountries();
-//
-//            // Crear una lista de países ordenada alfabéticamente
-//            List<String> countryList = Arrays.asList(countryCodes);
-//            Collections.sort(countryList);
+//            TextField calle2 = new TextField();
+//            calle2.setPromptText("Calle 2");
+//            TextField calleP = new TextField();
+//            calleP.setPromptText("Calle principal");
+//            TextField ciudad = new TextField();
+//            ciudad.setPromptText("Ciudad");
+//            TextField pais = new TextField();
+//            pais.setPromptText("Pais");
+//            HBox hb1 = new HBox(new Label("Pais "), pais);
 
-            // Crear el ComboBox y establecer la lista de países
-////            ComboBox<String> countryComboBox = new ComboBox<>(FXCollections.observableArrayList(countryList));
-
-//            telefono.setPromptText("Telefono");
             hb.getChildren().addAll(tfEtiqueta, calle1);
-            contentDic.getChildren().addAll(hb,calle2,calleP,ciudad,hb1);
+//            contentDic.getChildren().addAll(hb, calle2, calleP, ciudad, hb1);
+            contentDic.getChildren().addAll(hb);
 
         }
 
@@ -288,26 +282,125 @@ public class AggContactsController implements Initializable {
         }
 
     }
-     private void ajustarAlturaVBox() {
+
+    private void ajustarAlturaVBox() {
         contentPrincipal.setPrefHeight(contentPrincipal.getPrefHeight() + 50); // Ajusta según sea necesario
     }
-     
+
     @FXML
     private void regresar() throws IOException {
         App.setRoot("principalContactos");
-    }    
+    }
 
     @FXML
-    private void agregarContacto(ActionEvent event) {
+    private void agregarContacto(ActionEvent event) throws IOException {
+        // Obtener la información de la interfaz gráfica
+        String nombre = tfNombre.getText();
 
-        
-        
-        
-        
-        
-        
-        
-    
+        String apellidos = tftApellido.getText();
+        String empresa = tfEmpresa.getText();
+
+        // Crear una instancia de Contacto
+        Contacto nuevoContacto = new Contacto();
+        if (empresa.length() > 0) {
+            nuevoContacto.setNombre(empresa);
+        } else {
+            nuevoContacto.setNombre(nombre);
+            nuevoContacto.setApellidos(apellidos);
+        }
+
+        // Agregar atributos (teléfonos, correos, direcciones, etc.) al contacto
+        agregarAtributos(nuevoContacto);
+
+        // Agregar el nuevo contacto al usuario logueado
+        usuarioLogeado.addContacto(nuevoContacto);
+
+        // Restablecer la interfaz gráfica o realizar otras acciones según sea necesario
+        //limpiarInterfaz();
+    }
+
+    private void agregarAtributos(Contacto contacto) throws IOException {
+        // Agregar teléfonos
+        for (int i = 1; i < contentTelf.getChildren().size(); i++) {
+            Node node = contentTelf.getChildren().get(i);
+            if (node instanceof HBox) {
+                HBox hbox = (HBox) node;
+                TextField etiqueta = (TextField) hbox.getChildren().get(0);
+                TextField telefono = (TextField) hbox.getChildren().get(1);
+
+                // Validar que ambos campos no estén vacíos antes de agregar el teléfono
+                if (!etiqueta.getText().isEmpty() && !telefono.getText().isEmpty()) {
+                    contacto.addAtributo(new Atributo(etiqueta.getText(), telefono.getText(), Tipo.TELEFONO));
+                }
+            }
+        }
+
+        // Agregar correos
+        for (int i = 1; i < contentCorreo.getChildren().size(); i++) {
+            Node node = contentCorreo.getChildren().get(i);
+            if (node instanceof HBox) {
+                HBox hbox = (HBox) node;
+                TextField etiqueta = (TextField) hbox.getChildren().get(0);
+                TextField correo = (TextField) hbox.getChildren().get(1);
+
+                // Validar que ambos campos no estén vacíos antes de agregar el correo
+                if (!etiqueta.getText().isEmpty() && !correo.getText().isEmpty()) {
+                    contacto.addAtributo(new Atributo(etiqueta.getText(), correo.getText(), Tipo.CORREO));
+                }
+            }
+        }
+
+        // Agregar direcciones
+        for (int i = 1; i < contentDic.getChildren().size(); i++) {
+            Node node = contentDic.getChildren().get(i);
+            if (node instanceof HBox) {
+                HBox hbox = (HBox) node;
+                TextField etiqueta = (TextField) hbox.getChildren().get(0);
+                TextField calle1 = (TextField) hbox.getChildren().get(1);
+
+                // Agregar más campos de dirección según sea necesario
+                // Validar que ambos campos no estén vacíos antes de agregar la dirección
+                if (!etiqueta.getText().isEmpty() && !calle1.getText().isEmpty()) {
+                    // Puedes crear una clase específica para representar direcciones y manejarla aquí
+                    // Por ahora, solo se agrega un atributo con la etiqueta y la calle1
+                    contacto.addAtributo(new Atributo(etiqueta.getText(), calle1.getText(), Tipo.DIRECCION));
+                }
+            }
+        }
+
+        // Agregar fechas
+        for (int i = 1; i < contentFecha.getChildren().size(); i++) {
+            Node node = contentFecha.getChildren().get(i);
+            if (node instanceof HBox) {
+                HBox hbox = (HBox) node;
+                TextField etiqueta = (TextField) hbox.getChildren().get(0);
+                DatePicker fecha = (DatePicker) hbox.getChildren().get(1);
+
+                // Validar que ambos campos no estén vacíos antes de agregar la fecha
+                if (!etiqueta.getText().isEmpty() && fecha.getValue() != null) {
+                    // Puedes manejar la fecha según tus necesidades
+                    // Por ahora, solo se agrega un atributo con la etiqueta y la fecha en formato String
+                    contacto.addAtributo(new Atributo(etiqueta.getText(), fecha.getValue().toString(), Tipo.FECHA));
+                }
+            }
+        }
+
+        // Agregar redes sociales
+        for (int i = 1; i < contentRedSocial.getChildren().size(); i++) {
+            Node node = contentRedSocial.getChildren().get(i);
+            if (node instanceof HBox) {
+                HBox hbox = (HBox) node;
+                TextField etiqueta = (TextField) hbox.getChildren().get(0);
+                TextField usuarioRedSocial = (TextField) hbox.getChildren().get(1);
+
+                // Validar que ambos campos no estén vacíos antes de agregar la red social
+                if (!etiqueta.getText().isEmpty() && !usuarioRedSocial.getText().isEmpty()) {
+                    contacto.addAtributo(new Atributo(etiqueta.getText(), usuarioRedSocial.getText(), Tipo.REDSOCIAL));
+                }
+            }
+        }
+        regresar();
+        ManejoArchivos.guardarDatos(usuarioLogeado);
     }
 
 }

@@ -3,6 +3,7 @@ package com.espol.app.contactos;
 import com.espol.app.contactos.modelo.Atributo;
 import com.espol.app.contactos.modelo.Contacto;
 import com.espol.app.contactos.modelo.Usuario;
+import com.espol.app.contactos.utilidades.ManejoArchivos;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -17,7 +18,7 @@ import javafx.scene.layout.VBox;
 
 
 public class SecondaryController implements Initializable{
-    private Usuario userLogIn;
+    static Usuario userLogIn;
     
     @FXML
     private VBox contactos;
@@ -61,10 +62,12 @@ public class SecondaryController implements Initializable{
     @FXML
     private void visualizar() throws IOException {
         App.setRoot("tertiary");
+        System.out.println(userLogIn.getContactos());
     }
     
     @FXML
     private void salir() throws IOException {
+        ManejoArchivos.guardarDatos(userLogIn);
         App.setRoot("primary");
     }
 }

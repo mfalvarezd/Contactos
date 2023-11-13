@@ -19,6 +19,8 @@ public class Usuario implements Serializable{
     private String user;
     private String password;
     private List<Contacto> contactos;
+    private static final long serialVersionUID = 8297940025975275697L;
+
 
     public Usuario(String user, String password, String nombre) {
         this.user = user;
@@ -57,6 +59,9 @@ public class Usuario implements Serializable{
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+    public void addContacto(Contacto c){
+        this.contactos.add(c);
     }
 
     @Override
