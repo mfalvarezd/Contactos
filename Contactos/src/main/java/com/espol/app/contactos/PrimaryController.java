@@ -1,5 +1,6 @@
 package com.espol.app.contactos;
 
+import com.espol.app.contactos.modelo.Usuario;
 import com.espol.app.contactos.utilidades.ManejoArchivos;
 import java.io.IOException;
 import java.net.URL;
@@ -34,14 +35,22 @@ public class PrimaryController implements Initializable{
     @FXML
     private HBox buttonBox;
     
+    static Usuario usuarioLogeado;
+
+
+    
     @FXML
     private void ingresar() throws IOException {
         String usuario = tfusuario.getText();
         String password = pfPassword.getText();
         System.out.println(usuario+password);
         //Logica para iniciar sección
-        System.out.println("Hola Mundo");
-        App.setRoot("secondary2");
+        if(ManejoArchivos.logIn(usuario, password)){
+            usuarioLogeado = ManejoArchivos.getDatos(usuario);
+            System.out.println("El usuario existe ");
+            App.setRoot("principalContactos");
+        }
+        
     }            
 
     @Override
@@ -123,5 +132,10 @@ public class PrimaryController implements Initializable{
         buttonBox.setSpacing(100);                
         
         pContenido.getChildren().addAll(buttonBox);        
+    }
+
+    @FXML
+    private void salir(ActionEvent event) {
+         System.exit(0);
     }
 }

@@ -31,7 +31,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {       
-        scene = new Scene(loadFXML("primary"), 338, 588);
+        scene = new Scene(loadFXML("primary"), 350, 588);
         stage.setScene(scene);
         stage.setTitle("Contactos");        
         Image imagen = new Image("file:imagenes\\logo.png");                
@@ -39,28 +39,7 @@ public class App extends Application {
         stage.show();
         
         user = new Usuario("carfgonz", "123", "Carlos Flores");
-        
-        Atributo<String> at = new Atributo<String>("Carlos", "09890283", Tipo.TELEFONO);
-        Foto fot = new Foto("FOTO");
-        
-        List<Atributo<String>> atributos = new ArrayList<>();
-        atributos.add(at);
-        
-        List<Foto> fotos = new ArrayList<>();
-        fotos.add(fot);
-        Date da = new Date(23,23,23);
-        
-        Persona p1 = new Persona("Lopez", da, atributos, fotos);
-        Persona p2 = new Persona("Flores", da, atributos, fotos);
-        Persona p3 = new Persona("Martinez", da, atributos, fotos);
-        Persona p4 = new Persona("Prueba", da, atributos, fotos);
-        Persona p5 = new Persona("Azul", da, atributos, fotos);                                
-        
-        user.getContactos().add(p1);
-        user.getContactos().add(p2);
-        user.getContactos().add(p3);
-        user.getContactos().add(p4);
-        user.getContactos().add(p5);        
+      
         
     }
 

@@ -15,7 +15,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
+
 public class SecondaryController implements Initializable{
+    private Usuario userLogIn;
     
     @FXML
     private VBox contactos;
@@ -28,7 +30,10 @@ public class SecondaryController implements Initializable{
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+       userLogIn=PrimaryController.usuarioLogeado;
+        System.out.println("El usuario que inicio se sesion es ");
+        System.out.println(userLogIn.getNombre());
+         System.out.println(userLogIn.getUser());
     }
 
     @FXML

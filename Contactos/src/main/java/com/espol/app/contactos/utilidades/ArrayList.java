@@ -4,6 +4,7 @@
  */
 package com.espol.app.contactos.utilidades;
 
+import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Iterator;
 
@@ -12,7 +13,7 @@ import java.util.Iterator;
  * @author carfgonz
  * @param <E>
  */
-public class ArrayList<E> implements List<E> {
+public class ArrayList<E> implements List<E>, Serializable {
     private E[] elements;
     private int CAPACITY = 100;
     private int effectiveSize;
@@ -212,5 +213,17 @@ public class ArrayList<E> implements List<E> {
             newArreglo.add(arreglo[i]);
         }
         return newArreglo;
+    }
+    public String toString(){
+        String cadena = "";
+        for (int i = 0; i < effectiveSize; i++) {
+            if (i < effectiveSize - 1) {
+                cadena = cadena + elements[i] + ",";
+            } else {
+                cadena = cadena + elements[i];
+            }
+
+        }
+        return '[' + cadena + ']';
     }
 }

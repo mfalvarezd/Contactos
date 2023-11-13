@@ -9,19 +9,23 @@ import java.io.Serializable;
 /**
  *
  * @author mfalvarez
- * @param <T>
+ * 
  */
-public class Atributo<T> implements Serializable{
+public class Atributo implements Serializable{
 
     private String nombre;
-    private T valor;
+    private String valor;
     private Tipo tipo;
 
-    public Atributo(String nombre, T valor, Tipo tipo) {
+    public Atributo(String nombre, String valor, Tipo tipo) {
         this.nombre = nombre;
         this.valor = valor;
         this.tipo = tipo;
     }
+    public Atributo() {
+
+    }
+
 
     public String getNombre() {
         return nombre;
@@ -31,11 +35,11 @@ public class Atributo<T> implements Serializable{
         this.nombre = nombre;
     }
 
-    public T getValor() {
+    public String getValor() {
         return valor;
     }
 
-    public void setValor(T valor) {
+    public void setValor(String valor) {
         this.valor = valor;
     }
 
@@ -46,5 +50,11 @@ public class Atributo<T> implements Serializable{
     public void setTipo(Tipo tipo) {
         this.tipo = tipo;
     }
+
+    @Override
+    public String toString() {
+        return "Atributo{" + "nombre=" + nombre + ", valor=" + valor + ", tipo=" + tipo + '}';
+    }
+   
 
 }

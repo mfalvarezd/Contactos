@@ -12,41 +12,10 @@ import java.util.Date;
  *
  * @author mfalvarez
  */
-public class Persona extends Contacto implements Serializable{
-    private String apellidos;
-    private Date bday;
-
-    public Persona(String apellidos, Date bday, List atributos, List fotos, List contactos_relacionados, String descripcion) {
-        super(atributos, fotos, contactos_relacionados, descripcion);
-        this.apellidos = apellidos;
-        this.bday = bday;
-    }
-
-    public Persona(String apellidos, Date bday, List atributos, List fotos) {
-        super(atributos, fotos);
-        this.apellidos = apellidos;
-        this.bday = bday;
-    }
+public class Persona extends Contacto  implements Serializable{
 
 
-    public String getApellidos() {
-        return apellidos;
-    }
 
-    public void setApellidos(String apellidos) {
-        this.apellidos = apellidos;
-    }
+   
 
-    public Date getBday() {
-        return bday;
-    }
-
-    public void setBday(Date bday) {
-        this.bday = bday;
-    }
-
-    public Persona() {
-    }
-    
-    
 }

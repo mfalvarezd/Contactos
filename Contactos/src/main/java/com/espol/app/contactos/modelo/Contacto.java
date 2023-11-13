@@ -4,6 +4,7 @@
  */
 package com.espol.app.contactos.modelo;
 
+import com.espol.app.contactos.utilidades.ArrayList;
 import com.espol.app.contactos.utilidades.List;
 import java.io.Serializable;
 
@@ -12,19 +13,24 @@ import java.io.Serializable;
  * @author mfalvarez
  * @param <T>
  */
-public class Contacto<T> implements Serializable{
-
-    private List<Atributo<T>> atributos;
+public class Contacto implements Serializable{
+    private String nombre;
+    private String apellidos;
+    private List<Atributo> atributos;
     private List<Foto> fotos;
-    private List<Contacto<T>> contactos_relacionados;
+    private List<Contacto> contactos_relacionados;
     private boolean esFavorito;
     private String descripcion;
 
-    public List<Atributo<T>> getAtributos() {
+    public Contacto() {
+        this.atributos = new ArrayList<>();
+    }
+
+    public List<Atributo> getAtributos() {
         return atributos;
     }
 
-    public void setAtributos(List<Atributo<T>> atributos) {
+    public void setAtributos(List<Atributo> atributos) {
         this.atributos = atributos;
     }
 
@@ -36,11 +42,11 @@ public class Contacto<T> implements Serializable{
         this.fotos = fotos;
     }
 
-    public List<Contacto<T>> getContactos_relacionados() {
+    public List<Contacto> getContactos_relacionados() {
         return contactos_relacionados;
     }
 
-    public void setContactos_relacionados(List<Contacto<T>> contactos_relacionados) {
+    public void setContactos_relacionados(List<Contacto> contactos_relacionados) {
         this.contactos_relacionados = contactos_relacionados;
     }
 
@@ -60,18 +66,30 @@ public class Contacto<T> implements Serializable{
         this.descripcion = descripcion;
     }
 
-    public Contacto(List<Atributo<T>> atributos, List<Foto> fotos, List<Contacto<T>> contactos_relacionados, String descripcion) {
-        this(atributos, fotos);
-        this.contactos_relacionados = contactos_relacionados;
-        this.descripcion = descripcion;
+    public String getNombre() {
+        return nombre;
     }
 
-    public Contacto(List<Atributo<T>> atributos, List<Foto> fotos) {
-        this.atributos = atributos;
-        this.fotos = fotos;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
-    public Contacto(){
-        
+
+    public String getApellidos() {
+        return apellidos;
     }
+
+    public void setApellidos(String apellidos) {
+        this.apellidos = apellidos;
+    }
+    public void addAtributo(Atributo a){
+        this.atributos.add(a);
+    }
+
+    @Override
+    public String toString() {
+        return "Contacto{" + "nombre=" + nombre + ", apellidos=" + apellidos + ", atributos=" + atributos + ", fotos=" + fotos + ", contactos_relacionados=" + contactos_relacionados + ", esFavorito=" + esFavorito + ", descripcion=" + descripcion + '}';
+    }
+    
+    
 
 }

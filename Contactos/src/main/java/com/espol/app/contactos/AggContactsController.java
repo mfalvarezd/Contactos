@@ -5,6 +5,10 @@
 package com.espol.app.contactos;
 
 //import com.espol.app.contactos.utilidades.List;
+import com.espol.app.contactos.modelo.Contacto;
+import com.espol.app.contactos.modelo.Empresa;
+import com.espol.app.contactos.modelo.Persona;
+import com.espol.app.contactos.modelo.Usuario;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
@@ -84,12 +88,14 @@ public class AggContactsController implements Initializable {
     private Button btnRedSocial;
     @FXML
     private ScrollPane scrollPane;
+    private Usuario usuarioLogeado;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        usuarioLogeado=PrimaryController.usuarioLogeado;
 
         // TODO
         tfNombre.setOnKeyPressed(event -> {
@@ -174,7 +180,6 @@ public class AggContactsController implements Initializable {
             tfEtiqueta.setPromptText("Etiqueta");
             tfEtiqueta.setMaxWidth(60);
             TextField telefono = new TextField();
-
             telefono.setPromptText("Telefono");
             hb.getChildren().addAll(tfEtiqueta, telefono);
             contentTelf.getChildren().addAll(hb);
@@ -289,7 +294,20 @@ public class AggContactsController implements Initializable {
      
     @FXML
     private void regresar() throws IOException {
-        App.setRoot("secondary2");
+        App.setRoot("principalContactos");
     }    
+
+    @FXML
+    private void agregarContacto(ActionEvent event) {
+
+        
+        
+        
+        
+        
+        
+        
+    
+    }
 
 }

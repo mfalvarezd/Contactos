@@ -65,7 +65,7 @@ public class ManejoArchivos {
     public static void agregarUsuario(String usuario, String password, String nombre) {
         try {
             
-            FileOutputStream fout = new FileOutputStream("ususarios/" + usuario + ".ser");
+            FileOutputStream fout = new FileOutputStream("usuarios/" + usuario + ".ser");
             
             ObjectOutputStream obj = new ObjectOutputStream(fout);
 

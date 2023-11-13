@@ -4,11 +4,13 @@
  */
 package com.espol.app.contactos.utilidades;
 
+import java.io.Serializable;
+
 /**
  *
  * @author mfalvarez
  */
-public class Node<E> {
+public class Node<E> implements Serializable{
     private E element;
     private Node<E> next;
     private Node<E> previous;

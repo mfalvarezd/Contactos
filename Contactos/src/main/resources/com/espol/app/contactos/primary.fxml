@@ -79,6 +79,7 @@
                   </Button>
                </children>
             </HBox>
+            <Button mnemonicParsing="false" onAction="#salir" text="Salir" />
          </children>
       </VBox>
    </children>

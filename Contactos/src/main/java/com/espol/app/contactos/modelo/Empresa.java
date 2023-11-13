@@ -11,19 +11,9 @@ import java.io.Serializable;
  *
  * @author mfalvarez
  */
-public class Empresa extends Contacto implements Serializable{
+public class Empresa implements Serializable{
 
-    public Empresa(List atributos, List fotos, List contactos_relacionados, String descripcion) {
-        super(atributos, fotos, contactos_relacionados, descripcion);
-    }
-
-    public Empresa(List atributos, List fotos) {
-        super(atributos, fotos);
-    }
-
-    public Empresa() {
-    }
-   
+  
 
     
 }

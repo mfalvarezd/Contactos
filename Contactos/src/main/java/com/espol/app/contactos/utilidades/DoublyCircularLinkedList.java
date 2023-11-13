@@ -4,6 +4,7 @@
  */
 package com.espol.app.contactos.utilidades;
 
+import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Iterator;
 
@@ -12,7 +13,7 @@ import java.util.Iterator;
  * @author carfgonz
  * @param <E>
  */
-public class DoublyCircularLinkedList<E> implements List<E>{
+public class DoublyCircularLinkedList<E> implements List<E>, Serializable{
     
     private Node<E> last;
 
