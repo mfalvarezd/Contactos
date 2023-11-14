@@ -20,8 +20,7 @@ import javafx.scene.image.Image;
  */
 public class App extends Application {
     
-    private static Scene scene;
-    public static Usuario user;
+    private static Scene scene;    
 
     @Override
     public void start(Stage stage) throws IOException {       
@@ -30,11 +29,7 @@ public class App extends Application {
         stage.setTitle("Contactos");        
         Image imagen = new Image("file:imagenes\\logo.png");                
         stage.getIcons().add(imagen);
-        stage.show();
-        
-        user = new Usuario("carfgonz", "123", "Carlos Flores");
-      
-        
+        stage.show();                              
     }
 
     static void setRoot(String fxml) throws IOException {

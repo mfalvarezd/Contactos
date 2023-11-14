@@ -20,6 +20,10 @@ public class Foto implements Serializable{
     public String getUrl() {
         return url;
     }
+    
+    public Foto() {
+        this.url = "file:imagenes\\user.png";
+    }    
 
     public void setUrl(String url) {
         this.url = url;

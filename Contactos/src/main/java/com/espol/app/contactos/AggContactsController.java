@@ -7,10 +7,12 @@ package com.espol.app.contactos;
 //import com.espol.app.contactos.utilidades.List;
 import com.espol.app.contactos.modelo.Atributo;
 import com.espol.app.contactos.modelo.Contacto;
+import com.espol.app.contactos.modelo.Foto;
 
 import com.espol.app.contactos.modelo.Tipo;
 import com.espol.app.contactos.modelo.Usuario;
 import com.espol.app.contactos.utilidades.ArrayList;
+import com.espol.app.contactos.utilidades.DoublyCircularLinkedList;
 import com.espol.app.contactos.utilidades.ManejoArchivos;
 import java.io.IOException;
 import java.net.URL;
@@ -308,6 +310,20 @@ public class AggContactsController implements Initializable {
             nuevoContacto.setApellidos(apellidos);
         }
 
+
+        Foto foto1 = new Foto();
+        Foto foto2 = new Foto();
+        Foto foto3 = new Foto();
+        
+        DoublyCircularLinkedList<Foto> fotos = new DoublyCircularLinkedList<Foto>();
+        fotos.add(foto3);
+        fotos.add(foto1);
+        fotos.add(foto2);
+        
+        nuevoContacto.setFotos(fotos);        
+        
+        
+        
         // Agregar atributos (teléfonos, correos, direcciones, etc.) al contacto
         agregarAtributos(nuevoContacto);
 
