@@ -226,4 +226,14 @@ public class ArrayList<E> implements List<E>, Serializable {
         }
         return '[' + cadena + ']';
     }
+
+    @Override
+    public E getPrevious(E actual) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public E getNext(E actual) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }

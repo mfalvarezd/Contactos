@@ -5,6 +5,7 @@
 package com.espol.app.contactos.modelo;
 
 import com.espol.app.contactos.utilidades.ArrayList;
+import com.espol.app.contactos.utilidades.DoublyCircularLinkedList;
 import com.espol.app.contactos.utilidades.List;
 import java.io.Serializable;
 
@@ -24,6 +25,7 @@ public class Contacto implements Serializable{
 
     public Contacto() {
         this.atributos = new ArrayList<>();
+        this.fotos = new DoublyCircularLinkedList<>();
     }
 
     public List<Atributo> getAtributos() {

@@ -11,9 +11,9 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="588.0" prefWidth="338.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.espol.app.contactos.SecondaryController">
    <children>
-      <VBox alignment="CENTER" fillWidth="false" prefHeight="588.0" prefWidth="338.0">
+      <VBox alignment="TOP_CENTER" fillWidth="false" prefHeight="588.0" prefWidth="338.0">
          <children>
-            <HBox alignment="CENTER" prefHeight="36.0" prefWidth="337.0" spacing="140.0">
+            <HBox alignment="CENTER" prefHeight="57.0" prefWidth="337.0" spacing="140.0">
                <children>
                   <Label text="Contactos">
                      <font>
@@ -38,6 +38,9 @@
                      </content>
                   </ScrollPane>
                </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
             </Pane>
             <HBox alignment="CENTER" prefHeight="74.0" prefWidth="276.0" spacing="50.0">
                <children>

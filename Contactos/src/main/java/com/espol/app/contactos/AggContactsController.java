@@ -14,6 +14,7 @@ import com.espol.app.contactos.modelo.Usuario;
 import com.espol.app.contactos.utilidades.ArrayList;
 import com.espol.app.contactos.utilidades.DoublyCircularLinkedList;
 import com.espol.app.contactos.utilidades.ManejoArchivos;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
@@ -32,10 +33,12 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 
 /**
  * FXML Controller class
@@ -83,6 +86,7 @@ public class AggContactsController implements Initializable {
     private HBox default2;
     @FXML
     private VBox default3;
+    
     private int MAXTELF = 3;
     private int MAXCORREO = 3;
     private int MAXDIC = 3;
@@ -95,14 +99,16 @@ public class AggContactsController implements Initializable {
     @FXML
     private ScrollPane scrollPane;
     private Usuario usuarioLogeado;
+    
+    private DoublyCircularLinkedList<Foto> fotos = new DoublyCircularLinkedList<Foto>();
 
     /**
      * Initializes the controller class.
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    public void initialize(URL url, ResourceBundle rb) {                                                
         usuarioLogeado = PrimaryController.usuarioLogeado;
-
+        
         // TODO
         tfNombre.setOnKeyPressed(event -> {
             if (event.getCode().toString().equals("TAB")) {
@@ -138,8 +144,32 @@ public class AggContactsController implements Initializable {
             }
         });
 
+        btnAgregarFoto.setOnAction(eh->{
+            this.abrirFoto();           
+        });
+        
     }
+    
+    
+    private void abrirFoto() {        
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Imágenes", "*.png", "*.jpg"));
+        
+        File archivoSeleccionado = fileChooser.showOpenDialog(null);
 
+        // Verificar si se seleccionó un archivo
+        if (archivoSeleccionado != null) {            
+            String url = archivoSeleccionado.toURI().toString();           
+            Image imagen = new Image(url);            
+            imgFoto.setImage(imagen);
+            imgFoto.setFitWidth(200);
+            imgFoto.setFitHeight(150);
+            
+            Foto f = new Foto (url);
+            fotos.add(f);                        
+        }
+    }
+    
     @FXML
     private void ingresoEmpresa(ActionEvent event) {
 
@@ -175,8 +205,7 @@ public class AggContactsController implements Initializable {
     }
 
     @FXML
-    private void aggTelf(ActionEvent event) {
-
+    private void aggTelf(ActionEvent event) {               
         if (MAXTELF > 0) {
             MAXTELF--;
             HBox hb = new HBox();
@@ -189,6 +218,7 @@ public class AggContactsController implements Initializable {
             telefono.setPromptText("Telefono");
             hb.getChildren().addAll(tfEtiqueta, telefono);
             contentTelf.getChildren().addAll(hb);
+            ajustarAlturaVBox();
 
         }
 
@@ -209,6 +239,7 @@ public class AggContactsController implements Initializable {
             correo.setPromptText("Correo");
             hb.getChildren().addAll(tfEtiqueta, correo);
             contentCorreo.getChildren().addAll(hb);
+            ajustarAlturaVBox();
 
         }
 
@@ -239,6 +270,7 @@ public class AggContactsController implements Initializable {
             hb.getChildren().addAll(tfEtiqueta, calle1);
 //            contentDic.getChildren().addAll(hb, calle2, calleP, ciudad, hb1);
             contentDic.getChildren().addAll(hb);
+            ajustarAlturaVBox();
 
         }
 
@@ -259,6 +291,7 @@ public class AggContactsController implements Initializable {
             fecha.setPromptText("Fecha");
             hb.getChildren().addAll(tfEtiqueta, fecha);
             contentFecha.getChildren().addAll(hb);
+            ajustarAlturaVBox();
 
         }
     }
@@ -310,16 +343,7 @@ public class AggContactsController implements Initializable {
             nuevoContacto.setApellidos(apellidos);
         }
 
-
-        Foto foto1 = new Foto();
-        Foto foto2 = new Foto();
-        Foto foto3 = new Foto();
-        
-        DoublyCircularLinkedList<Foto> fotos = new DoublyCircularLinkedList<Foto>();
-        fotos.add(foto3);
-        fotos.add(foto1);
-        fotos.add(foto2);
-        
+       
         nuevoContacto.setFotos(fotos);        
         
         

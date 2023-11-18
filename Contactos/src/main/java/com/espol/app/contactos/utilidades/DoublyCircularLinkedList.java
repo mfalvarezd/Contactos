@@ -196,6 +196,10 @@ public class DoublyCircularLinkedList<E> implements List<E>, Serializable{
             return null;
         }
         
+        if (index == 0) {
+            return this.last.getNext().getElement();
+        }
+        
         for (int i=0; i<index; i++) {
             cursor = cursor.getNext();
         }
@@ -243,15 +247,15 @@ public class DoublyCircularLinkedList<E> implements List<E>, Serializable{
     public Iterator<E> iterator() {
         Iterator<E> it = new Iterator<E>(){
             int count = 0;
-            Node<E> cursor = last.getNext();
+            Node<E> cursor = last;
             @Override
             public boolean hasNext() {                             
                 return count<size();
             }
 
             @Override
-            public E next() {                
-                E elemento = cursor.getElement();
+            public E next() {         
+                E elemento = cursor.getNext().getElement();
                 cursor = cursor.getNext();
                 count++;
                 return elemento;
@@ -271,5 +275,35 @@ public class DoublyCircularLinkedList<E> implements List<E>, Serializable{
             linea+="]";
         }
         return linea;        
+    }
+
+    @Override
+    public E getPrevious(E actual) {
+        Node<E> viajero;
+                
+        if (actual == null){
+            return null;
+        }
+        
+        for (viajero = this.last.getNext(); !viajero.getNext().getElement().equals(actual); viajero = viajero.getNext()) {
+            
+        }
+        
+        return viajero.getElement();        
+    }
+
+    @Override
+    public E getNext(E actual) {
+        Node<E> viajero = last.getNext();
+                
+        if (actual == null){
+            return null;
+        }
+                
+        while (!viajero.getElement().equals(actual)) {
+            viajero = viajero.getNext();
+        }
+        
+        return viajero.getNext().getElement();
     }
 }

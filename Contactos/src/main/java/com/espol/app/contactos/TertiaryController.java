@@ -59,55 +59,48 @@ public class TertiaryController implements Initializable{
     @Override
     public void initialize(URL url, ResourceBundle rb) {    
         if (!contactos.isEmpty()){
-        informacion.getChildren().add(2,nombre);
-        informacion.getChildren().add(3, caja);
-        informacion.getChildren().add( 4,favorito);
-        informacion.getChildren().add(5, descripcionL);  
+            informacion.getChildren().add(2,nombre);
+            informacion.getChildren().add(3, caja);
+            informacion.getChildren().add(4,favorito);
+            informacion.getChildren().add(5, descripcionL);                      
+            
+            c = contactos.get(0);
+
+                            
+            siguiente.setOnAction( ev -> {                                
+                c = contactos.getNext(c);
+                actualizar(c);                
+            });    
         
-        Iterator<Contacto> it = contactos.iterator();
-        c = it.next();
-        
-        actualizar(c);
-        
-        siguiente.setOnAction( ev -> {
-            if (it.hasNext()) {
-                c = it.next();                
+            anterior.setOnAction(eh -> {                
+                c = contactos.getPrevious(c);                
                 actualizar(c);
-            }            
-        });    
-        
-        anterior.setOnAction(eh -> {
-            //Contacto anterior = contactos.getPrevious(c);
-            //actualizar(anterior);
-        });
+            });
         }
     }
     
-    public void actualizar(Contacto c) {
+    public void actualizar(Contacto c) {        
         System.out.println(c.toString());
                         
         nombre.setText(c.getNombre()+" "+c.getApellidos());        
                 
-        List<Foto> fotos = c.getFotos();        
-        Iterator<Foto> itFoto = fotos.iterator();        
-        fotoActual = itFoto.next();
+        List<Foto> fotos = c.getFotos();                
+        fotoActual = fotos.get(0);
         Image imagen = new Image(fotoActual.getUrl());
         fotoView.setImage(imagen);
         
         
-        nextFoto.setOnAction(ec -> {            
-            if (itFoto.hasNext()) {
-                fotoActual = itFoto.next(); 
-                Image imagenNext = new Image(fotoActual.getUrl());
-                fotoView.setImage(imagenNext);  
-            }
+        nextFoto.setOnAction(ec -> {                        
+            fotoActual = fotos.getNext(fotoActual);
+            Image imagenNext = new Image(fotoActual.getUrl());
+            fotoView.setImage(imagenNext);              
           
         });          
         
         farmerFoto.setOnAction(eh -> {
-            //Foto anterior = fotos.getPrevious(fotoActual);
-            //Image imagenNext = new Image(anterior.getUrl());
-            //fotoView.setImage(imagenNext);
+            fotoActual = fotos.getPrevious(fotoActual);            
+            Image imagenNext = new Image(fotoActual.getUrl());
+            fotoView.setImage(imagenNext);
         });
         
         List<Atributo> atributos = c.getAtributos();
@@ -179,6 +172,5 @@ public class TertiaryController implements Initializable{
     private void regresar() throws IOException {
         App.setRoot("principalContactos");
     }        
-    
+ 
 }
-

@@ -35,6 +35,7 @@ public class SecondaryController implements Initializable{
         System.out.println("El usuario que inicio se sesion es ");
         System.out.println(userLogIn.getNombre());
          System.out.println(userLogIn.getUser());
+         System.out.println(userLogIn.getContactos());
     }
 
     @FXML
