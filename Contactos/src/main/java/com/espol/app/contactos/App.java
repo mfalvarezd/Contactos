@@ -32,15 +32,7 @@ public class App extends Application {
         stage.setTitle("Contactos");        
         Image imagen = new Image("file:imagenes\\logo.png");                
         stage.getIcons().add(imagen);
-        stage.show();       
-        
-        List<String> as = new DoublyCircularLinkedList<>();
-        as.add("1");
-        as.add("2");
-        as.add("3");
-        as.add("4");
-        as.add("5");
-        System.out.println(as.getNext("2"));
+        stage.show();               
     }
 
     static void setRoot(String fxml) throws IOException {

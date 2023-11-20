@@ -26,6 +26,7 @@ public class Contacto implements Serializable{
     public Contacto() {
         this.atributos = new ArrayList<>();
         this.fotos = new DoublyCircularLinkedList<>();
+        this.esFavorito = false;
     }
 
     public List<Atributo> getAtributos() {

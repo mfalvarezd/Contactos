@@ -52,39 +52,39 @@ public class TertiaryController implements Initializable{
     Contacto c;
         
     Label nombre = new Label();
-    HBox caja = new HBox();
+    VBox caja = new VBox();
     HBox favorito = new HBox();
-    Label descripcionL = new Label();
+    Label descripcionL = new Label("Descipción: ");
+    Label mapa = new Label();
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {    
         if (!contactos.isEmpty()){
             informacion.getChildren().add(2,nombre);
-            informacion.getChildren().add(3, caja);
+            informacion.getChildren().add(3, caja);         
             informacion.getChildren().add(4,favorito);
-            informacion.getChildren().add(5, descripcionL);                      
+            informacion.getChildren().add(5, descripcionL);  
+            informacion.getChildren().add(6, mapa);   
             
             c = contactos.get(0);
-
-                            
+            this.actualizar(c);
+                
             siguiente.setOnAction( ev -> {                                
                 c = contactos.getNext(c);
-                actualizar(c);                
+                this.actualizar(c);                
             });    
         
             anterior.setOnAction(eh -> {                
                 c = contactos.getPrevious(c);                
-                actualizar(c);
+                this.actualizar(c);
             });
         }
     }
     
-    public void actualizar(Contacto c) {        
-        System.out.println(c.toString());
-                        
+    public void actualizar(Contacto c) {                                        
         nombre.setText(c.getNombre()+" "+c.getApellidos());        
                 
-        List<Foto> fotos = c.getFotos();                
+        List<Foto> fotos = c.getFotos();            
         fotoActual = fotos.get(0);
         Image imagen = new Image(fotoActual.getUrl());
         fotoView.setImage(imagen);
@@ -106,44 +106,62 @@ public class TertiaryController implements Initializable{
         List<Atributo> atributos = c.getAtributos();
         
         caja.getChildren().clear();
+        caja.setSpacing(10);
+        
+        VBox telefonos = new VBox();
+        telefonos.getChildren().add(new Label("Telefonos:"));
+        VBox redesSociales = new VBox();     
+        redesSociales.getChildren().add(new Label("Redes Sociales:"));
+        VBox fechas = new VBox();     
+        fechas.getChildren().add(new Label("Fechas:"));
+        VBox direcciones = new VBox();     
+        direcciones.getChildren().add(new Label("Direcciones:"));
+        VBox correos = new VBox();
+        correos.getChildren().add(new Label("Correos:"));
+        
+        caja.getChildren().addAll(telefonos, redesSociales, fechas, direcciones, correos);
         
         for (Atributo at : atributos) {
-            Tipo tipo = at.getTipo();            
-            Label etiqueta;
-            Label valor;
-            Label tipoL;
+            HBox atributosBox = new HBox();
             
-            if (tipo == Tipo.TELEFONO) {                
-                tipoL = new Label ("Telefono: ");
-                etiqueta = new Label (at.getNombre());
-                valor = new Label (at.getValor());   
-                caja.getChildren().addAll(tipoL, etiqueta, valor);
-            } else if (tipo == Tipo.REDSOCIAL) {
-                tipoL = new Label ("Red Social: ");
-                etiqueta = new Label (at.getNombre());
-                valor = new Label (at.getValor());   
-                caja.getChildren().addAll(tipoL, etiqueta, valor);
+            Tipo tipo = at.getTipo();                                              
+            String etiqueta;
+            String valor;
+            Label atributo;
+            
+            if (tipo == Tipo.TELEFONO) {                             
+                etiqueta = at.getNombre();
+                valor = at.getValor();
+                atributo = new Label(etiqueta+" - "+valor);
+                atributosBox.getChildren().addAll(atributo);
+                telefonos.getChildren().add(atributosBox);
+            } else if (tipo == Tipo.REDSOCIAL) {                
+                etiqueta = at.getNombre();
+                valor = at.getValor();
+                atributo = new Label(etiqueta+" - "+valor);
+                atributosBox.getChildren().addAll(atributo);
+                redesSociales.getChildren().add(atributosBox);
             } else if (tipo == Tipo.FECHA) {
-                tipoL = new Label ("Telefono: ");
-                etiqueta = new Label (at.getNombre());
-                valor = new Label (at.getValor());          
-                caja.getChildren().addAll(tipoL, etiqueta, valor);
+                etiqueta = at.getNombre();
+                valor = at.getValor();       
+                atributo = new Label(etiqueta+" - "+valor);
+                atributosBox.getChildren().addAll(atributo);
+                fechas.getChildren().add(atributosBox);
             } else if (tipo == Tipo.DIRECCION) {
-                tipoL = new Label ("Direccion: ");
-                etiqueta = new Label (at.getNombre());
-                valor = new Label (at.getValor());          
-                caja.getChildren().addAll(tipoL, etiqueta, valor);
+                etiqueta = at.getNombre();
+                valor = at.getValor();
+                atributo = new Label(etiqueta+" - "+valor);
+                atributosBox.getChildren().addAll(atributo);
+                direcciones.getChildren().add(atributosBox);
             } else if (tipo == Tipo.CORREO) {
-                tipoL = new Label ("Correo: ");
-                etiqueta = new Label (at.getNombre());
-                valor = new Label (at.getValor());          
-                caja.getChildren().addAll(tipoL, etiqueta, valor);
-            }
-            System.out.println("TODO BIEN");
+                etiqueta = at.getNombre();
+                valor = at.getValor();      
+                atributo = new Label(etiqueta+" - "+valor);
+                atributosBox.getChildren().addAll(atributo);
+                correos.getChildren().add(atributosBox);
+            }        
         }
-        
-        
-        
+                        
         //List<Contacto> contactosRelacionados = c.getContactos_relacionados();                
         
         boolean esFavorito = c.isEsFavorito();
@@ -163,8 +181,19 @@ public class TertiaryController implements Initializable{
         }
                 
         
-        String descripción = c.getDescripcion();
-        descripcionL.setText(descripción);
+        String descripción = c.getDescripcion();        
+        Label mapas = new Label("CASA");        
+        mapa.setText("CASA");
+        
+        /*
+        WebView webView = new WebView();
+        WebEngine webEngine = webView.getEngine();
+
+        // URL del mapa de Google Maps
+        String mapUrl = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d...."; // Sustituye esto con la URL de tu mapa
+
+        // Cargar el mapa en el WebView
+        webEngine.load(mapUrl);*/
     }
     
     

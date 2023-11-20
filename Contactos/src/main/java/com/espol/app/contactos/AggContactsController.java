@@ -28,6 +28,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -86,6 +87,8 @@ public class AggContactsController implements Initializable {
     private HBox default2;
     @FXML
     private VBox default3;
+    @FXML
+    private CheckBox esFavorito;
     
     private int MAXTELF = 3;
     private int MAXCORREO = 3;
@@ -172,7 +175,6 @@ public class AggContactsController implements Initializable {
     
     @FXML
     private void ingresoEmpresa(ActionEvent event) {
-
         if (tfEmpresa.getText().length() > 0) {
             tfNombre.setText("");
             tftApellido.setText("");
@@ -273,7 +275,6 @@ public class AggContactsController implements Initializable {
             ajustarAlturaVBox();
 
         }
-
     }
 
     @FXML
@@ -292,7 +293,6 @@ public class AggContactsController implements Initializable {
             hb.getChildren().addAll(tfEtiqueta, fecha);
             contentFecha.getChildren().addAll(hb);
             ajustarAlturaVBox();
-
         }
     }
 
@@ -312,9 +312,7 @@ public class AggContactsController implements Initializable {
             hb.getChildren().addAll(tfEtiqueta, usuario);
             contentRedSocial.getChildren().addAll(hb);
             ajustarAlturaVBox();
-
         }
-
     }
 
     private void ajustarAlturaVBox() {
@@ -345,8 +343,9 @@ public class AggContactsController implements Initializable {
 
        
         nuevoContacto.setFotos(fotos);        
+        Boolean favorito = esFavorito.isSelected();
         
-        
+        nuevoContacto.setEsFavorito(favorito);
         
         // Agregar atributos (teléfonos, correos, direcciones, etc.) al contacto
         agregarAtributos(nuevoContacto);

@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
@@ -46,6 +47,7 @@
                                  </image>
                               </ImageView>
                               <Button fx:id="btnAgregarFoto" mnemonicParsing="false" text="Agregar foto" />
+                              <CheckBox fx:id="esFavorito" mnemonicParsing="false" text="Favorito" />
                            </children>
                         </VBox>
                      </children>
@@ -56,9 +58,6 @@
                         <TextField fx:id="tftApellido" onAction="#ingresoApellido" promptText="Apellidos" />
                         <TextField fx:id="tfEmpresa" onAction="#ingresoEmpresa" promptText="Empresa" />
                      </children>
-                     <padding>
-                        <Insets top="10.0" />
-                     </padding>
                   </VBox>
                   <VBox fx:id="contentTelf" prefHeight="37.0" prefWidth="318.0">
                      <children>
@@ -74,7 +73,7 @@
                         </HBox>
                      </children>
                      <VBox.margin>
-                        <Insets top="10.0" />
+                        <Insets top="5.0" />
                      </VBox.margin>
                   </VBox>
                   <VBox fx:id="contentCorreo" prefHeight="38.0" prefWidth="322.0">
