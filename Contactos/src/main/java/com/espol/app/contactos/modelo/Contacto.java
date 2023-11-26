@@ -15,8 +15,7 @@ import java.io.Serializable;
  * @param <T>
  */
 public class Contacto implements Serializable{
-    private String nombre;
-    private String apellidos;
+    private String nombre;  
     private List<Atributo> atributos;
     private List<Foto> fotos;
     private List<Contacto> contactos_relacionados;
@@ -77,22 +76,12 @@ public class Contacto implements Serializable{
         this.nombre = nombre;
     }
 
-    public String getApellidos() {
-        return apellidos;
-    }
-
-    public void setApellidos(String apellidos) {
-        this.apellidos = apellidos;
-    }
     public void addAtributo(Atributo a){
         this.atributos.add(a);
     }
 
     @Override
     public String toString() {
-        return "Contacto{" + "nombre=" + nombre + ", apellidos=" + apellidos + ", atributos=" + atributos + ", fotos=" + fotos + ", contactos_relacionados=" + contactos_relacionados + ", esFavorito=" + esFavorito + ", descripcion=" + descripcion + '}';
+        return "Contacto{" + "nombre=" + nombre + ", atributos=" + atributos + ", fotos=" + fotos + ", contactos_relacionados=" + contactos_relacionados + ", esFavorito=" + esFavorito + ", descripcion=" + descripcion + '}';
     }
-    
-    
-
 }

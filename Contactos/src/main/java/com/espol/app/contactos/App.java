@@ -1,11 +1,13 @@
 package com.espol.app.contactos;
 
-
-
+import com.espol.app.contactos.modelo.Contacto;
+import com.espol.app.contactos.modelo.Empresa;
+import com.espol.app.contactos.modelo.Foto;
+import com.espol.app.contactos.modelo.Persona;
 import com.espol.app.contactos.modelo.Usuario;
+import com.espol.app.contactos.utilidades.ArrayList;
 import com.espol.app.contactos.utilidades.DoublyCircularLinkedList;
 import com.espol.app.contactos.utilidades.List;
-
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -32,7 +34,7 @@ public class App extends Application {
         stage.setTitle("Contactos");        
         Image imagen = new Image("file:imagenes\\logo.png");                
         stage.getIcons().add(imagen);
-        stage.show();               
+        stage.show();                
     }
 
     static void setRoot(String fxml) throws IOException {

@@ -184,9 +184,10 @@ public class DoublyCircularLinkedList<E> implements List<E>, Serializable{
         element = cursor.getNext().getElement();
         cursor.getNext().getNext().setPrevious(cursor);
         cursor.setNext(cursor.getNext().getNext());        
-        return element;
-        
+        return element;        
     }
+    
+    
 
     @Override
     public E get(int index) {        
@@ -305,5 +306,26 @@ public class DoublyCircularLinkedList<E> implements List<E>, Serializable{
         }
         
         return viajero.getNext().getElement();
+    }
+
+    @Override
+    public E remove(E elemento) {
+        E eliminado = null;
+        
+        if (elemento == null) {
+            return eliminado;
+        }
+        
+        Iterator<E> it = this.iterator();
+        int count = 0;
+        
+        while (it.hasNext()) {
+            eliminado = it.next();            
+            if (eliminado.equals(elemento)) {
+                this.remove(count);
+            }
+            count++;
+        }                        
+        return eliminado;
     }
 }

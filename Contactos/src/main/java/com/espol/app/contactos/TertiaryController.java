@@ -46,7 +46,7 @@ public class TertiaryController implements Initializable{
     @FXML
     private Button anterior;
     
-    static List<Contacto> contactos = SecondaryController.userLogIn.getContactos();
+    static List<Contacto> contactos = PrincipalContactosController.userLogIn.getContactos();
 
     Foto fotoActual;
     Contacto c;
@@ -82,7 +82,7 @@ public class TertiaryController implements Initializable{
     }
     
     public void actualizar(Contacto c) {                                        
-        nombre.setText(c.getNombre()+" "+c.getApellidos());        
+        nombre.setText(c.getNombre());        
                 
         List<Foto> fotos = c.getFotos();            
         fotoActual = fotos.get(0);

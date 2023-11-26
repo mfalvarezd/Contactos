@@ -29,6 +29,18 @@ public class Foto implements Serializable{
         this.url = url;
     }
     
+    @Override
+    public boolean equals(Object foto) {
+        if (this == foto) {
+            return true;
+        }
+        
+        if (foto==null || this.getClass()!=foto.getClass()) {
+            return false;
+        }        
+        Foto f = (Foto) foto;
+        return this.url.equals(f.getUrl());
+    }
     
     
 }

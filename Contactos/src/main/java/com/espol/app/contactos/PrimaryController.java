@@ -36,30 +36,22 @@ public class PrimaryController implements Initializable{
     private HBox buttonBox;
     
     static Usuario usuarioLogeado;
-
-
     
     @FXML
     private void ingresar() throws IOException {
         String usuario = tfusuario.getText();
         String password = pfPassword.getText();
-        System.out.println(usuario+password);
+        
         //Logica para iniciar sección
         if(ManejoArchivos.logIn(usuario, password)){
             usuarioLogeado = ManejoArchivos.getDatos(usuario);
-            System.out.println("El usuario existe ");
+            System.out.println("El usuario existe");
             App.setRoot("principalContactos");
-        }
-        
+        }        
     }            
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        /*
-        ingresar.setOnAction(event -> {
-            System.out.println("Hola Mundoxd");
-        });
-        */
     }
 
     @FXML
@@ -127,6 +119,7 @@ public class PrimaryController implements Initializable{
                 ex.printStackTrace();
             }
         });
+        
         btnSalir.setOnAction(ev -> System.exit(0));
         buttonBox.getChildren().addAll(btnSalir, btnVolver);
         buttonBox.setSpacing(100);                
@@ -136,14 +129,13 @@ public class PrimaryController implements Initializable{
 
     @FXML
     private void salir(ActionEvent event) {
-        if(usuarioLogeado!=null){
-        usuarioLogeado = SecondaryController.userLogIn;
-        ManejoArchivos.guardarDatos(usuarioLogeado);
-        System.out.println(usuarioLogeado.getContactos());
-        System.exit(0);
+        if(usuarioLogeado!=null){            
+            usuarioLogeado = PrincipalContactosController.userLogIn;
+            ManejoArchivos.guardarDatos(usuarioLogeado);
+            System.out.println(usuarioLogeado.getContactos());
+            System.exit(0);
         }else{
             System.exit(0);
-        }
-        
+        }        
     }
 }

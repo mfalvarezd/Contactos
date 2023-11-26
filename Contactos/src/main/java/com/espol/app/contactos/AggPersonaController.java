@@ -8,12 +8,14 @@ package com.espol.app.contactos;
 import com.espol.app.contactos.modelo.Atributo;
 import com.espol.app.contactos.modelo.Contacto;
 import com.espol.app.contactos.modelo.Foto;
+import com.espol.app.contactos.modelo.Persona;
 
 import com.espol.app.contactos.modelo.Tipo;
 import com.espol.app.contactos.modelo.Usuario;
 import com.espol.app.contactos.utilidades.ArrayList;
 import com.espol.app.contactos.utilidades.DoublyCircularLinkedList;
 import com.espol.app.contactos.utilidades.ManejoArchivos;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -46,7 +48,7 @@ import javafx.stage.FileChooser;
  *
  * @author mfalvarez
  */
-public class AggContactsController implements Initializable {
+public class AggPersonaController implements Initializable {
 
     @FXML
     private VBox contentPrincipal;
@@ -89,6 +91,8 @@ public class AggContactsController implements Initializable {
     private VBox default3;
     @FXML
     private CheckBox esFavorito;
+    @FXML
+    private Button btnEliminarFoto;
     
     private int MAXTELF = 3;
     private int MAXCORREO = 3;
@@ -110,51 +114,15 @@ public class AggContactsController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {                                                
-        usuarioLogeado = PrimaryController.usuarioLogeado;
+        usuarioLogeado = PrimaryController.usuarioLogeado;  
         
-        // TODO
-        tfNombre.setOnKeyPressed(event -> {
-            if (event.getCode().toString().equals("TAB")) {
-                tfEmpresa.setDisable(true);
-                if (tfNombre.getText().length() == 0 && tftApellido.getText().length() == 0) {
-                    tfEmpresa.setDisable(false);
-                }
-                tftApellido.requestFocus(); // Mover el foco al siguiente TextField
-                event.consume(); // Consumir el evento para evitar que el Tab se inserte en el TextField
-            }
-        });
-        tftApellido.setOnKeyPressed(event -> {
-            if (event.getCode().toString().equals("TAB")) {
-                tfEmpresa.setDisable(true);
-                if (tfNombre.getText().length() == 0 && tftApellido.getText().length() == 0) {
-                    tfEmpresa.setDisable(false);
-                }
-
-            }
-        });
-        tfEmpresa.setOnKeyPressed(event -> {
-            if (event.getCode().toString().equals("TAB")) {
-                tfNombre.setText("");
-                tftApellido.setText("");
-                tfNombre.setDisable(true);
-
-                tftApellido.setDisable(true);
-                if (tfEmpresa.getText().length() == 0) {
-                    tfNombre.setDisable(false);
-                    tftApellido.setDisable(false);
-                }
-
-            }
-        });
-
         btnAgregarFoto.setOnAction(eh->{
-            this.abrirFoto();           
+            this.abrirFoto();
         });
-        
     }
     
     
-    private void abrirFoto() {        
+    private void abrirFoto() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Imágenes", "*.png", "*.jpg"));
         
@@ -162,47 +130,14 @@ public class AggContactsController implements Initializable {
 
         // Verificar si se seleccionó un archivo
         if (archivoSeleccionado != null) {            
-            String url = archivoSeleccionado.toURI().toString();           
+            String url = archivoSeleccionado.toURI().toString();
             Image imagen = new Image(url);            
             imgFoto.setImage(imagen);
             imgFoto.setFitWidth(200);
             imgFoto.setFitHeight(150);
             
-            Foto f = new Foto (url);
+            Foto f = new Foto (url);            
             fotos.add(f);                        
-        }
-    }
-    
-    @FXML
-    private void ingresoEmpresa(ActionEvent event) {
-        if (tfEmpresa.getText().length() > 0) {
-            tfNombre.setText("");
-            tftApellido.setText("");
-            tfNombre.setDisable(true);
-
-            tftApellido.setDisable(true);
-
-        } else if (tfEmpresa.getText().length() == 0) {
-            tfNombre.setDisable(false);
-            tftApellido.setDisable(false);
-        }
-    }
-
-    @FXML
-    private void ingresoNombre(ActionEvent event) {
-        if (tftApellido.getText().length() > 0 || tfNombre.getText().length() > 0) {
-            tfEmpresa.setDisable(true);
-        } else if (tftApellido.getText().length() == 0 && tfNombre.getText().length() == 0) {
-            tfEmpresa.setDisable(false);
-        }
-    }
-
-    @FXML
-    private void ingresoApellido(ActionEvent event) {
-        if (tftApellido.getText().length() > 0 || tfNombre.getText().length() > 0) {
-            tfEmpresa.setDisable(true);
-        } else if (tftApellido.getText().length() == 0 && tfNombre.getText().length() == 0) {
-            tfEmpresa.setDisable(false);
         }
     }
 
@@ -221,9 +156,7 @@ public class AggContactsController implements Initializable {
             hb.getChildren().addAll(tfEtiqueta, telefono);
             contentTelf.getChildren().addAll(hb);
             ajustarAlturaVBox();
-
         }
-
     }
 
     @FXML
@@ -242,9 +175,7 @@ public class AggContactsController implements Initializable {
             hb.getChildren().addAll(tfEtiqueta, correo);
             contentCorreo.getChildren().addAll(hb);
             ajustarAlturaVBox();
-
         }
-
     }
 
     @FXML
@@ -259,21 +190,11 @@ public class AggContactsController implements Initializable {
             tfEtiqueta.setMaxWidth(60);
             TextField calle1 = new TextField();
             calle1.setPromptText("Calle 1");
-//            TextField calle2 = new TextField();
-//            calle2.setPromptText("Calle 2");
-//            TextField calleP = new TextField();
-//            calleP.setPromptText("Calle principal");
-//            TextField ciudad = new TextField();
-//            ciudad.setPromptText("Ciudad");
-//            TextField pais = new TextField();
-//            pais.setPromptText("Pais");
-//            HBox hb1 = new HBox(new Label("Pais "), pais);
 
             hb.getChildren().addAll(tfEtiqueta, calle1);
-//            contentDic.getChildren().addAll(hb, calle2, calleP, ciudad, hb1);
+            
             contentDic.getChildren().addAll(hb);
             ajustarAlturaVBox();
-
         }
     }
 
@@ -316,7 +237,7 @@ public class AggContactsController implements Initializable {
     }
 
     private void ajustarAlturaVBox() {
-        contentPrincipal.setPrefHeight(contentPrincipal.getPrefHeight() + 50); // Ajusta según sea necesario
+        contentPrincipal.setPrefHeight(contentPrincipal.getPrefHeight() + 10); // Ajusta según sea necesario
     }
 
     @FXML
@@ -330,31 +251,23 @@ public class AggContactsController implements Initializable {
         String nombre = tfNombre.getText();
 
         String apellidos = tftApellido.getText();
-        String empresa = tfEmpresa.getText();
-
-        // Crear una instancia de Contacto
-        Contacto nuevoContacto = new Contacto();
-        if (empresa.length() > 0) {
-            nuevoContacto.setNombre(empresa);
-        } else {
-            nuevoContacto.setNombre(nombre);
-            nuevoContacto.setApellidos(apellidos);
-        }
-
-       
+        
+        // Crear una instancia de Persona
+        Persona nuevoContacto = new Persona();
+        
+        nuevoContacto.setNombre(nombre);
+        nuevoContacto.setApellidos(apellidos);
+               
         nuevoContacto.setFotos(fotos);        
         Boolean favorito = esFavorito.isSelected();
         
         nuevoContacto.setEsFavorito(favorito);
         
         // Agregar atributos (teléfonos, correos, direcciones, etc.) al contacto
-        agregarAtributos(nuevoContacto);
+        this.agregarAtributos(nuevoContacto);
 
         // Agregar el nuevo contacto al usuario logueado
-        usuarioLogeado.addContacto(nuevoContacto);
-
-        // Restablecer la interfaz gráfica o realizar otras acciones según sea necesario
-        //limpiarInterfaz();
+        usuarioLogeado.addContacto(nuevoContacto);        
     }
 
     private void agregarAtributos(Contacto contacto) throws IOException {
@@ -437,8 +350,7 @@ public class AggContactsController implements Initializable {
                 }
             }
         }
-        regresar();
+        this.regresar();
         ManejoArchivos.guardarDatos(usuarioLogeado);
     }
-
 }
