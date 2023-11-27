@@ -11,8 +11,11 @@ import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Separator;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -36,19 +39,24 @@ public class PrincipalContactosController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
         userLogIn = UsuarioSingleton.getInstancia();
         txtUsuario.setText(userLogIn.getNombre());
         System.out.println("El usuario que inicio se sesion es ");
         System.out.println(userLogIn.getNombre());
         System.out.println(userLogIn.getUser());
         System.out.println(userLogIn.getContactos());
-        contactos.setSpacing(10);
+        contactos.setSpacing(8);
 
         for (Contacto c : userLogIn.getContactos()) {
             HBox caja = new HBox();
+            Separator sp = new Separator(Orientation.HORIZONTAL);
+            sp.setPrefWidth(contactos.getWidth());
 
             String nombre_completo = c.getNombre();
             Label nombre = new Label(nombre_completo);
+            nombre.setOnMouseEntered((event) -> {nombre.setEffect(new DropShadow());});
+            nombre.setOnMouseExited((event) -> {nombre.setEffect(null);contactos.requestFocus();});
             nombre.setPadding(new Insets(7, 0, 0, 0));
 
             if (c.getFotos() != null && !c.getFotos().isEmpty()) {
@@ -63,7 +71,7 @@ public class PrincipalContactosController implements Initializable {
                 caja.setPadding(new Insets(0, 0, 0, 10));
                 caja.getChildren().addAll(foto, nombre);
 
-                contactos.getChildren().add(caja);
+                contactos.getChildren().addAll(caja,sp);
             } else {
                 System.out.println("No tiene foto");
                 ImageView foto = new ImageView();
@@ -77,7 +85,7 @@ public class PrincipalContactosController implements Initializable {
                 caja.setPadding(new Insets(0, 0, 0, 10));
                 caja.getChildren().addAll(foto, nombre);
 
-                contactos.getChildren().add(caja);
+                contactos.getChildren().addAll(caja,sp);
                 // Lógica para manejar cuando no hay fotos disponibles
             }
 
@@ -117,14 +125,14 @@ public class PrincipalContactosController implements Initializable {
 
     @FXML
     private void visualizar() throws IOException {
-        App.setRoot("tertiary");
+        App.setRoot("visualizador");
         System.out.println(userLogIn.getContactos());
     }
 
     @FXML
     private void salir() throws IOException {
         ManejoArchivos.guardarDatos(userLogIn);
-        App.setRoot("primary");
+        App.setRoot("logIn");
     }
 
     @FXML

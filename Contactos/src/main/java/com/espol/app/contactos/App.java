@@ -29,7 +29,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {       
-        scene = new Scene(loadFXML("primary"), 338, 588);
+        scene = new Scene(loadFXML("logIn"), 338, 588);
         stage.setScene(scene);
         stage.setTitle("Contactos");        
         Image imagen = new Image("file:imagenes\\logo.png");                
