@@ -10,6 +10,7 @@ import com.espol.app.contactos.modelo.Empresa;
 import com.espol.app.contactos.modelo.Foto;
 import com.espol.app.contactos.modelo.Tipo;
 import com.espol.app.contactos.modelo.Usuario;
+import com.espol.app.contactos.modelo.UsuarioSingleton;
 import com.espol.app.contactos.utilidades.DoublyCircularLinkedList;
 import com.espol.app.contactos.utilidades.ManejoArchivos;
 import java.io.File;
@@ -101,7 +102,7 @@ public class AggEmpresaController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {                                                
-        usuarioLogeado = PrimaryController.usuarioLogeado;        
+        usuarioLogeado = UsuarioSingleton.getInstancia();        
 
         btnAgregarFoto.setOnAction(eh->{
             this.abrirFoto();           

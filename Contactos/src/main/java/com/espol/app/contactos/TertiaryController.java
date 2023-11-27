@@ -8,6 +8,7 @@ import com.espol.app.contactos.modelo.Atributo;
 import com.espol.app.contactos.modelo.Contacto;
 import com.espol.app.contactos.modelo.Foto;
 import com.espol.app.contactos.modelo.Tipo;
+import com.espol.app.contactos.modelo.UsuarioSingleton;
 import com.espol.app.contactos.utilidades.List;
 import java.io.IOException;
 import java.net.URL;
@@ -46,7 +47,7 @@ public class TertiaryController implements Initializable{
     @FXML
     private Button anterior;
     
-    static List<Contacto> contactos = PrincipalContactosController.userLogIn.getContactos();
+    static List<Contacto> contactos = UsuarioSingleton.getInstancia().getContactos();
 
     Foto fotoActual;
     Contacto c;

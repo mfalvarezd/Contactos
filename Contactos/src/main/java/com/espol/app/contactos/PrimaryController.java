@@ -1,6 +1,7 @@
 package com.espol.app.contactos;
 
 import com.espol.app.contactos.modelo.Usuario;
+import com.espol.app.contactos.modelo.UsuarioSingleton;
 import com.espol.app.contactos.utilidades.ManejoArchivos;
 import java.io.IOException;
 import java.net.URL;
@@ -35,8 +36,7 @@ public class PrimaryController implements Initializable{
     @FXML
     private HBox buttonBox;
     
-    static Usuario usuarioLogeado;
-    
+
     @FXML
     private void ingresar() throws IOException {
         String usuario = tfusuario.getText();
@@ -44,7 +44,12 @@ public class PrimaryController implements Initializable{
         
         //Logica para iniciar sección
         if(ManejoArchivos.logIn(usuario, password)){
-            usuarioLogeado = ManejoArchivos.getDatos(usuario);
+            try {
+                Usuario usuarioLogeado = ManejoArchivos.getDatos(usuario);
+                UsuarioSingleton.setInstancia(usuarioLogeado);
+            } catch (ClassNotFoundException ex) {
+                ex.printStackTrace();
+            }
             System.out.println("El usuario existe");
             App.setRoot("principalContactos");
         }        
@@ -86,28 +91,32 @@ public class PrimaryController implements Initializable{
         pContenido.getChildren().addAll(lblRegistro, lblUsuario, tFuser, lblPassword, pw, lblpw, pw2, lblNombre, tfNombre, lblmr, btnRegistrarse);
 
         btnRegistrarse.setOnAction(ev -> {
-            if (ManejoArchivos.validarUsuario(tFuser.getText())) {
-                lblmr.setVisible(true);
-                lblmr.setText("El usuario ya existe, intente otro nombre de usuario");
-
-            } else {
-                if (tFuser.getText().isBlank() || pw.getText().isBlank()) {
+            try {
+                if (ManejoArchivos.validarUsuario(tFuser.getText())) {
                     lblmr.setVisible(true);
-                    lblmr.setText("Por favor, complete todos los recuadros");
+                    lblmr.setText("El usuario ya existe, intente otro nombre de usuario");
+                    
                 } else {
-                    if (pw.getText().equals(pw2.getText())) {
+                    if (tFuser.getText().isBlank() || pw.getText().isBlank()) {
                         lblmr.setVisible(true);
-                        lblmr.setText("Usuario registrado exitosamente");
-                        ManejoArchivos.agregarUsuario(tFuser.getText(), pw.getText(), tfNombre.getText());
-
+                        lblmr.setText("Por favor, complete todos los recuadros");
                     } else {
-                        lblmr.setVisible(true);
-                        lblmr.setText("Las contraseñas no coinciden");
-
+                        if (pw.getText().equals(pw2.getText())) {
+                            lblmr.setVisible(true);
+                            lblmr.setText("Usuario registrado exitosamente");
+                            ManejoArchivos.agregarUsuario(tFuser.getText(), pw.getText(), tfNombre.getText());
+                            
+                        } else {
+                            lblmr.setVisible(true);
+                            lblmr.setText("Las contraseñas no coinciden");
+                            
+                        }
+                        
                     }
 
                 }
-
+            } catch (ClassNotFoundException ex) {
+                ex.printStackTrace();
             }
 
         });       
@@ -129,13 +138,7 @@ public class PrimaryController implements Initializable{
 
     @FXML
     private void salir(ActionEvent event) {
-        if(usuarioLogeado!=null){            
-            usuarioLogeado = PrincipalContactosController.userLogIn;
-            ManejoArchivos.guardarDatos(usuarioLogeado);
-            System.out.println(usuarioLogeado.getContactos());
-            System.exit(0);
-        }else{
-            System.exit(0);
-        }        
+
+        System.exit(0);
     }
 }

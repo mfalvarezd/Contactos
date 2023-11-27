@@ -190,23 +190,20 @@ public class DoublyCircularLinkedList<E> implements List<E>, Serializable{
     
 
     @Override
-    public E get(int index) {        
-        Node<E> cursor = last.getNext();
-        
-        if (index>this.size()-1) {
-            return null;
-        }
-        
-        if (index == 0) {
-            return this.last.getNext().getElement();
-        }
-        
-        for (int i=0; i<index; i++) {
-            cursor = cursor.getNext();
-        }
-        
-        return cursor.getElement();        
+  public E get(int index) {
+    if (index < 0 || index >= size()) {
+        return null; // Índice fuera de rango
     }
+
+    Node<E> cursor = last.getNext();
+
+    for (int i = 0; i < index; i++) {
+        cursor = cursor.getNext();
+    }
+
+    return cursor.getElement();
+}
+
 
     @Override
     public E set(int index, E element) {
@@ -266,17 +263,19 @@ public class DoublyCircularLinkedList<E> implements List<E>, Serializable{
     }
     
     public String toString() {
-        String linea = "[";
-        if (!this.isEmpty()) {
-            Iterator<E> it = this.iterator();            
-            while (it.hasNext()) {
-                linea+=it.next()+", ";            
+    StringBuilder sb = new StringBuilder("[");
+    if (!isEmpty()) {
+        Iterator<E> it = iterator();
+        while (it.hasNext()) {
+            sb.append(it.next());
+            if (it.hasNext()) {
+                sb.append(", ");
             }
-            linea = linea.substring(0, linea.length()-2);
-            linea+="]";
         }
-        return linea;        
     }
+    sb.append("]");
+    return sb.toString();
+}
 
     @Override
     public E getPrevious(E actual) {

@@ -12,6 +12,7 @@ import com.espol.app.contactos.modelo.Persona;
 
 import com.espol.app.contactos.modelo.Tipo;
 import com.espol.app.contactos.modelo.Usuario;
+import com.espol.app.contactos.modelo.UsuarioSingleton;
 import com.espol.app.contactos.utilidades.ArrayList;
 import com.espol.app.contactos.utilidades.DoublyCircularLinkedList;
 import com.espol.app.contactos.utilidades.ManejoArchivos;
@@ -24,6 +25,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -93,7 +95,7 @@ public class AggPersonaController implements Initializable {
     private CheckBox esFavorito;
     @FXML
     private Button btnEliminarFoto;
-    
+
     private int MAXTELF = 3;
     private int MAXCORREO = 3;
     private int MAXDIC = 3;
@@ -106,43 +108,42 @@ public class AggPersonaController implements Initializable {
     @FXML
     private ScrollPane scrollPane;
     private Usuario usuarioLogeado;
-    
+
     private DoublyCircularLinkedList<Foto> fotos = new DoublyCircularLinkedList<Foto>();
 
     /**
      * Initializes the controller class.
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb) {                                                
-        usuarioLogeado = PrimaryController.usuarioLogeado;  
-        
-        btnAgregarFoto.setOnAction(eh->{
+    public void initialize(URL url, ResourceBundle rb) {
+        usuarioLogeado = UsuarioSingleton.getInstancia();
+
+        btnAgregarFoto.setOnAction(eh -> {
             this.abrirFoto();
         });
     }
-    
-    
+
     private void abrirFoto() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Imágenes", "*.png", "*.jpg"));
-        
+
         File archivoSeleccionado = fileChooser.showOpenDialog(null);
 
         // Verificar si se seleccionó un archivo
-        if (archivoSeleccionado != null) {            
+        if (archivoSeleccionado != null) {
             String url = archivoSeleccionado.toURI().toString();
-            Image imagen = new Image(url);            
+            Image imagen = new Image(url);
             imgFoto.setImage(imagen);
             imgFoto.setFitWidth(200);
             imgFoto.setFitHeight(150);
-            
-            Foto f = new Foto (url);            
-            fotos.add(f);                        
+
+            Foto f = new Foto(url);
+            fotos.add(f);
         }
     }
 
     @FXML
-    private void aggTelf(ActionEvent event) {               
+    private void aggTelf(ActionEvent event) {
         if (MAXTELF > 0) {
             MAXTELF--;
             HBox hb = new HBox();
@@ -192,7 +193,7 @@ public class AggPersonaController implements Initializable {
             calle1.setPromptText("Calle 1");
 
             hb.getChildren().addAll(tfEtiqueta, calle1);
-            
+
             contentDic.getChildren().addAll(hb);
             ajustarAlturaVBox();
         }
@@ -242,7 +243,15 @@ public class AggPersonaController implements Initializable {
 
     @FXML
     private void regresar() throws IOException {
-        App.setRoot("principalContactos");
+        ManejoArchivos.guardarDatos(usuarioLogeado);
+        Platform.runLater(() -> {
+            try {
+                App.setRoot("principalContactos");
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        });
+
     }
 
     @FXML
@@ -251,23 +260,24 @@ public class AggPersonaController implements Initializable {
         String nombre = tfNombre.getText();
 
         String apellidos = tftApellido.getText();
-        
+
         // Crear una instancia de Persona
         Persona nuevoContacto = new Persona();
-        
+
         nuevoContacto.setNombre(nombre);
         nuevoContacto.setApellidos(apellidos);
-               
-        nuevoContacto.setFotos(fotos);        
+
+        nuevoContacto.setFotos(fotos);
         Boolean favorito = esFavorito.isSelected();
-        
+
         nuevoContacto.setEsFavorito(favorito);
-        
+
         // Agregar atributos (teléfonos, correos, direcciones, etc.) al contacto
         this.agregarAtributos(nuevoContacto);
 
         // Agregar el nuevo contacto al usuario logueado
-        usuarioLogeado.addContacto(nuevoContacto);        
+        usuarioLogeado.addContacto(nuevoContacto);
+        this.regresar();
     }
 
     private void agregarAtributos(Contacto contacto) throws IOException {
@@ -350,7 +360,6 @@ public class AggPersonaController implements Initializable {
                 }
             }
         }
-        this.regresar();
-        ManejoArchivos.guardarDatos(usuarioLogeado);
+
     }
 }
