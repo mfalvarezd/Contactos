@@ -54,7 +54,7 @@ public class VisualizadorController implements Initializable {
     @FXML
     private Button anterior;
 
-    private static List<Contacto> contactos = UsuarioSingleton.getInstancia().getContactos();
+    private static List<Contacto> contactos = PrincipalContactosController.visualizador;
 
     private Foto fotoActual;
     private Contacto c;

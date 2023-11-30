@@ -52,6 +52,7 @@ public class PrincipalContactosController implements Initializable {
     @FXML
     private TextField txtBuscar;
     private List<Contacto> listaContactos;
+    static protected List<Contacto> visualizador;
     private List<Contacto> filtrada;
     @FXML
     private ComboBox<String> cmbFiltros;
@@ -95,6 +96,7 @@ public class PrincipalContactosController implements Initializable {
                     case "Default":
                         contactos.getChildren().clear();
                         actualizarLista(listaContactos);
+                        visualizador=listaContactos;
                         break;
                     
                 }
@@ -106,12 +108,19 @@ public class PrincipalContactosController implements Initializable {
 
     private void actualizarLista(List<Contacto> lista) {
         contactos.getChildren().clear();
+        String nombre_completo;
         for (Contacto c : lista) {
+            if(c instanceof Persona){
+                Persona p = (Persona) c;
+                nombre_completo = c.getNombre()+" "+ p.getApellidos();
+            }else{
+                nombre_completo = c.getNombre();
+            }
             HBox caja = new HBox();
             Separator sp = new Separator(Orientation.HORIZONTAL);
             sp.setPrefWidth(contactos.getWidth());
 
-            String nombre_completo = c.getNombre();
+            
             Label nombre = new Label(nombre_completo);
             nombre.setOnMouseEntered((event) -> {
                 nombre.setEffect(new DropShadow());
@@ -188,6 +197,7 @@ public class PrincipalContactosController implements Initializable {
 
     @FXML
     private void visualizar() throws IOException {
+        
         App.setRoot("visualizador");
         System.out.println(userLogIn.getContactos());
     }
@@ -258,6 +268,7 @@ public class PrincipalContactosController implements Initializable {
                 
                 filtrada = nuevaLista;
                 actualizarLista(filtrada);
+                visualizador = filtrada;
                 
 
                 break;
@@ -277,6 +288,7 @@ public class PrincipalContactosController implements Initializable {
                 
                 filtrada = nuevaLista;
                 actualizarLista(filtrada);
+                visualizador = filtrada;
                 break;
             case "Tipo":
                 comparador = (Contacto c1, Contacto c2) -> Boolean.compare(c1.isEsEmpresa(), c2.isEsEmpresa());
@@ -290,6 +302,7 @@ public class PrincipalContactosController implements Initializable {
                 
                 filtrada = nuevaLista;
                 actualizarLista(filtrada);
+                visualizador = filtrada;
                 
                 
                 
