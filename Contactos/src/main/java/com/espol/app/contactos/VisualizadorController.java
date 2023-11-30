@@ -34,7 +34,7 @@ import javafx.scene.layout.VBox;
  *
  * @author ander
  */
-public class TertiaryController implements Initializable {
+public class VisualizadorController implements Initializable {
 
     @FXML
     private VBox informacion;
