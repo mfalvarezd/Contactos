@@ -7,6 +7,7 @@ package com.espol.app.contactos;
 //import com.espol.app.contactos.utilidades.List;
 import com.espol.app.contactos.modelo.Atributo;
 import com.espol.app.contactos.modelo.Contacto;
+import com.espol.app.contactos.modelo.Etiqueta;
 import com.espol.app.contactos.modelo.Foto;
 import com.espol.app.contactos.modelo.Persona;
 
@@ -30,7 +31,10 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -95,6 +99,8 @@ public class AggPersonaController implements Initializable {
     private CheckBox esFavorito;
     @FXML
     private Button btnEliminarFoto;
+    @FXML
+    private ComboBox<Etiqueta> boxEtiqueta;
 
     private int MAXTELF = 3;
     private int MAXCORREO = 3;
@@ -115,8 +121,11 @@ public class AggPersonaController implements Initializable {
      * Initializes the controller class.
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    public void initialize(URL url, ResourceBundle rb) {        
         usuarioLogeado = UsuarioSingleton.getInstancia();
+        boxEtiqueta.getItems().add(Etiqueta.Amigos);
+        boxEtiqueta.getItems().add(Etiqueta.Familia);
+        boxEtiqueta.getItems().add(Etiqueta.Trabajo);
 
         btnAgregarFoto.setOnAction(eh -> {
             this.abrirFoto();
@@ -136,7 +145,6 @@ public class AggPersonaController implements Initializable {
             imgFoto.setImage(imagen);
             imgFoto.setFitWidth(200);
             imgFoto.setFitHeight(150);
-
             Foto f = new Foto(url);
             fotos.add(f);
         }
@@ -155,7 +163,7 @@ public class AggPersonaController implements Initializable {
             TextField telefono = new TextField();
             telefono.setPromptText("Telefono");
             hb.getChildren().addAll(tfEtiqueta, telefono);
-            contentTelf.getChildren().addAll(hb);
+            contentTelf.getChildren().addAll(hb);            
             ajustarAlturaVBox();
         }
     }
@@ -164,17 +172,21 @@ public class AggPersonaController implements Initializable {
     private void aggCorreo(ActionEvent event) {
         if (MAXCORREO > 0) {
             MAXCORREO--;
+            
             HBox hb = new HBox();
             hb.setSpacing(10);
+            
             TextField tfEtiqueta = new TextField();
-
             tfEtiqueta.setPromptText("Etiqueta");
             tfEtiqueta.setMaxWidth(60);
+            
             TextField correo = new TextField();
-
             correo.setPromptText("Correo");
+            
             hb.getChildren().addAll(tfEtiqueta, correo);
+            
             contentCorreo.getChildren().addAll(hb);
+            
             ajustarAlturaVBox();
         }
     }
@@ -183,18 +195,21 @@ public class AggPersonaController implements Initializable {
     private void aggDic(ActionEvent event) {
         if (MAXDIC > 0) {
             MAXDIC--;
+            
             HBox hb = new HBox();
             hb.setSpacing(10);
+            
             TextField tfEtiqueta = new TextField();
-
             tfEtiqueta.setPromptText("Etiqueta");
             tfEtiqueta.setMaxWidth(60);
+            
             TextField calle1 = new TextField();
             calle1.setPromptText("Calle 1");
 
             hb.getChildren().addAll(tfEtiqueta, calle1);
 
             contentDic.getChildren().addAll(hb);
+            
             ajustarAlturaVBox();
         }
     }
@@ -203,17 +218,21 @@ public class AggPersonaController implements Initializable {
     private void aggFecha(ActionEvent event) {
         if (MAXFECHA > 0) {
             MAXFECHA--;
+            
             HBox hb = new HBox();
             hb.setSpacing(10);
+            
             TextField tfEtiqueta = new TextField();
-
             tfEtiqueta.setPromptText("Etiqueta");
             tfEtiqueta.setMaxWidth(60);
+            
             DatePicker fecha = new DatePicker();
-
             fecha.setPromptText("Fecha");
+            
             hb.getChildren().addAll(tfEtiqueta, fecha);
+            
             contentFecha.getChildren().addAll(hb);
+            
             ajustarAlturaVBox();
         }
     }
@@ -222,23 +241,27 @@ public class AggPersonaController implements Initializable {
     private void aggRedSocial(ActionEvent event) {
         if (MAXREDSOCIAL > 0) {
             MAXREDSOCIAL--;
+            
             HBox hb = new HBox();
             hb.setSpacing(10);
+            
             TextField tfEtiqueta = new TextField();
-
-            tfEtiqueta.setPromptText("Etiqueta");
+            tfEtiqueta.setPromptText("Etiqueta");            
             tfEtiqueta.setMaxWidth(60);
+            
             TextField usuario = new TextField();
-
             usuario.setPromptText("Usuario");
+            
             hb.getChildren().addAll(tfEtiqueta, usuario);
+            
             contentRedSocial.getChildren().addAll(hb);
+            
             ajustarAlturaVBox();
         }
     }
 
     private void ajustarAlturaVBox() {
-        contentPrincipal.setPrefHeight(contentPrincipal.getPrefHeight() + 10); // Ajusta según sea necesario
+        contentPrincipal.setPrefHeight(contentPrincipal.getPrefHeight() + 20); // Ajusta según sea necesario
     }
 
     @FXML
@@ -251,33 +274,40 @@ public class AggPersonaController implements Initializable {
                 ex.printStackTrace();
             }
         });
-
     }
 
     @FXML
     private void agregarContacto(ActionEvent event) throws IOException {
-        // Obtener la información de la interfaz gráfica
-        String nombre = tfNombre.getText();
+        
+        if (fotos.size()<2) {
+            this.alerta();
+        } else {
+        
+            // Obtener la información de la interfaz gráfica
+            String nombre = tfNombre.getText();
 
-        String apellidos = tftApellido.getText();
+            String apellidos = tftApellido.getText();
 
-        // Crear una instancia de Persona
-        Persona nuevoContacto = new Persona();
+            // Crear una instancia de Persona
+            Persona nuevoContacto = new Persona();        
+            nuevoContacto.setNombre(nombre);
+            nuevoContacto.setApellidos(apellidos);
 
-        nuevoContacto.setNombre(nombre);
-        nuevoContacto.setApellidos(apellidos);
+            Etiqueta etiqueta = boxEtiqueta.getValue();
+            nuevoContacto.setEtiqueta(etiqueta);
+            
+            nuevoContacto.setFotos(fotos);
+            Boolean favorito = esFavorito.isSelected();
 
-        nuevoContacto.setFotos(fotos);
-        Boolean favorito = esFavorito.isSelected();
+            nuevoContacto.setEsFavorito(favorito);
 
-        nuevoContacto.setEsFavorito(favorito);
+            // Agregar atributos (teléfonos, correos, direcciones, etc.) al contacto
+            this.agregarAtributos(nuevoContacto);
 
-        // Agregar atributos (teléfonos, correos, direcciones, etc.) al contacto
-        this.agregarAtributos(nuevoContacto);
-
-        // Agregar el nuevo contacto al usuario logueado
-        usuarioLogeado.addContacto(nuevoContacto);
-        this.regresar();
+            // Agregar el nuevo contacto al usuario logueado
+            usuarioLogeado.addContacto(nuevoContacto);
+            this.regresar();
+        }
     }
 
     private void agregarAtributos(Contacto contacto) throws IOException {
@@ -360,6 +390,13 @@ public class AggPersonaController implements Initializable {
                 }
             }
         }
-
+    }
+    
+    private void alerta() {
+        Alert alert = new Alert(AlertType.WARNING);
+        alert.setTitle("Advertencia!!");
+        alert.setHeaderText(null);
+        alert.setContentText("Debe ingresar por lo menos dos fotos");       
+        alert.showAndWait();
     }
 }

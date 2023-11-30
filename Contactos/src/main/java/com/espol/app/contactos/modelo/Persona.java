@@ -16,12 +16,7 @@ public class Persona extends Contacto {
     public Persona() {
         super();
         this.setEsEmpresa(false);
-    }
-    
-    @Override
-    public String getNombre() {
-        return super.getNombre()+" "+this.apellidos;
-    }
+    }    
     
     public String getApellidos() {
         return apellidos;

@@ -7,6 +7,7 @@ package com.espol.app.contactos;
 import com.espol.app.contactos.modelo.Atributo;
 import com.espol.app.contactos.modelo.Contacto;
 import com.espol.app.contactos.modelo.Empresa;
+import com.espol.app.contactos.modelo.Etiqueta;
 import com.espol.app.contactos.modelo.Foto;
 import com.espol.app.contactos.modelo.Tipo;
 import com.espol.app.contactos.modelo.Usuario;
@@ -17,12 +18,15 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
@@ -79,6 +83,8 @@ public class AggEmpresaController implements Initializable {
     private VBox default3;
     @FXML
     private CheckBox esFavorito;
+    @FXML
+    private ComboBox<Etiqueta> boxEtiqueta;
     
     private int MAXTELF = 3;
     private int MAXCORREO = 3;
@@ -102,7 +108,9 @@ public class AggEmpresaController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {                                                
-        usuarioLogeado = UsuarioSingleton.getInstancia();        
+        usuarioLogeado = UsuarioSingleton.getInstancia();
+                
+        boxEtiqueta.getItems().add(Etiqueta.Trabajo);        
 
         btnAgregarFoto.setOnAction(eh->{
             this.abrirFoto();           
@@ -224,39 +232,53 @@ public class AggEmpresaController implements Initializable {
     }
 
     private void ajustarAlturaVBox() {
-        contentPrincipal.setPrefHeight(contentPrincipal.getPrefHeight() + 10); // Ajusta según sea necesario
+        contentPrincipal.setPrefHeight(contentPrincipal.getPrefHeight() + 20); // Ajusta según sea necesario
     }
 
     @FXML
     private void regresar() throws IOException {
-        App.setRoot("principalContactos");
+        ManejoArchivos.guardarDatos(usuarioLogeado);
+        Platform.runLater(() -> {
+            try {
+                App.setRoot("principalContactos");
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        });                
     }
 
     @FXML
     private void agregarContacto(ActionEvent event) throws IOException {
-        // Obtener la información de la interfaz gráfica        
-        
-        String empresaNombre = tfEmpresa.getText();
+        if (fotos.size()<2) {
+            this.alerta();
+        } else {        
+            // Obtener la información de la interfaz gráfica               
+            String empresaNombre = tfEmpresa.getText();
 
-        // Crear una instancia de Contacto
-        Empresa nuevoContacto = new Empresa();
-        
-        nuevoContacto.setNombre(empresaNombre);                  
-       
-        nuevoContacto.setFotos(fotos);  
-        
-        Boolean favorito = esFavorito.isSelected();
-        
-        nuevoContacto.setEsFavorito(favorito);
-        
-        // Agregar atributos (teléfonos, correos, direcciones, etc.) al contacto
-        this.agregarAtributos(nuevoContacto);
+            // Crear una instancia de Contacto
+            Empresa nuevoContacto = new Empresa();
 
-        // Agregar el nuevo contacto al usuario logueado
-        usuarioLogeado.addContacto(nuevoContacto);
+            nuevoContacto.setNombre(empresaNombre);                  
+            
+            Etiqueta etiqueta = boxEtiqueta.getValue();
+            nuevoContacto.setEtiqueta(etiqueta);            
 
-        // Restablecer la interfaz gráfica o realizar otras acciones según sea necesario
-        //limpiarInterfaz();
+            nuevoContacto.setFotos(fotos);  
+
+            Boolean favorito = esFavorito.isSelected();
+
+            nuevoContacto.setEsFavorito(favorito);
+
+            // Agregar atributos (teléfonos, correos, direcciones, etc.) al contacto
+            this.agregarAtributos(nuevoContacto);
+
+            // Agregar el nuevo contacto al usuario logueado
+            usuarioLogeado.addContacto(nuevoContacto);
+            this.regresar();
+
+            // Restablecer la interfaz gráfica o realizar otras acciones según sea necesario
+            //limpiarInterfaz();
+        }
     }
 
     private void agregarAtributos(Contacto contacto) throws IOException {
@@ -338,8 +360,14 @@ public class AggEmpresaController implements Initializable {
                     contacto.addAtributo(new Atributo(etiqueta.getText(), usuarioRedSocial.getText(), Tipo.REDSOCIAL));
                 }
             }
-        }
-        this.regresar();
-        ManejoArchivos.guardarDatos(usuarioLogeado);
+        }                
     }
+
+    private void alerta() {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Advertencia!!");
+        alert.setHeaderText(null);
+        alert.setContentText("Debe ingresar por lo menos dos fotos");       
+        alert.showAndWait();
+    }    
 }

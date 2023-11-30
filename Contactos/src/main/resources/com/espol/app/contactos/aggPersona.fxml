@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
@@ -14,17 +15,17 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="588.0" prefWidth="338.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.espol.app.contactos.AggPersonaController">
    <children>
-      <ScrollPane fx:id="scrollPane" layoutX="-2.0" layoutY="-5.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="597.0" prefWidth="345.0">
+      <ScrollPane fx:id="scrollPane" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="588.0" prefWidth="338.0">
          <content>
-            <VBox fx:id="contentPrincipal" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="595.0" prefWidth="341.0" spacing="10.0">
+            <VBox fx:id="contentPrincipal" alignment="TOP_CENTER" fillWidth="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="586.0" prefWidth="335.0" spacing="10.0">
                <children>
-                  <HBox fx:id="default1" alignment="TOP_CENTER" prefHeight="26.0" prefWidth="343.0" spacing="180.0">
+                  <HBox fx:id="default1" alignment="TOP_CENTER" prefHeight="26.0" prefWidth="270.0" spacing="100.0">
                      <children>
                         <Button fx:id="btnCancelar" alignment="CENTER" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#regresar" prefHeight="26.0" prefWidth="94.0" text="Cancelar">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font></Button>
-                           <Button fx:id="btnListo" mnemonicParsing="false" onAction="#agregarContacto" prefHeight="26.0" prefWidth="66.0" text="Listo">
+                           <Button fx:id="btnListo" mnemonicParsing="false" onAction="#agregarContacto" prefHeight="26.0" prefWidth="94.0" text="Guardar">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>                                                              
@@ -47,18 +48,23 @@
                                  </image>
                               </ImageView>
                               <Button fx:id="btnAgregarFoto" mnemonicParsing="false" text="Agregar foto" />
-                              <CheckBox fx:id="esFavorito" mnemonicParsing="false" text="Favorito" />
+                              <HBox alignment="CENTER" prefHeight="25.0" prefWidth="215.0" spacing="35.0">
+                                 <children>
+                                    <CheckBox fx:id="esFavorito" mnemonicParsing="false" text="Favorito" />
+                                    <ComboBox fx:id="boxEtiqueta" prefHeight="25.0" prefWidth="101.0" promptText="Etiqueta" />
+                                 </children>
+                              </HBox>
                            </children>
                         </VBox>
                      </children>
                   </HBox>
-                  <VBox fx:id="default3" prefHeight="64.0" prefWidth="321.0" spacing="10.0">
+                  <VBox fx:id="default3" prefHeight="64.0" prefWidth="212.0" spacing="10.0">
                      <children>
                         <TextField fx:id="tfNombre" promptText="Nombre" />
                         <TextField fx:id="tftApellido" promptText="Apellidos" />
                      </children>
                   </VBox>
-                  <VBox fx:id="contentTelf" prefHeight="37.0" prefWidth="318.0">
+                  <VBox fx:id="contentTelf" alignment="TOP_CENTER" prefHeight="37.0" prefWidth="279.0">
                      <children>
                         <HBox prefHeight="28.0" prefWidth="343.0">
                            <children>
@@ -75,7 +81,7 @@
                         <Insets top="5.0" />
                      </VBox.margin>
                   </VBox>
-                  <VBox fx:id="contentCorreo" prefHeight="38.0" prefWidth="322.0">
+                  <VBox fx:id="contentCorreo" alignment="TOP_CENTER" prefHeight="37.0" prefWidth="279.0">
                      <children>
                         <HBox prefHeight="28.0" prefWidth="343.0">
                            <children>
@@ -89,7 +95,7 @@
                         </HBox>
                      </children>
                   </VBox>
-                  <VBox fx:id="contentDic" prefHeight="36.0" prefWidth="322.0">
+                  <VBox fx:id="contentDic" alignment="TOP_CENTER" prefHeight="37.0" prefWidth="279.0">
                      <children>
                         <HBox prefHeight="28.0" prefWidth="343.0">
                            <children>
@@ -103,7 +109,7 @@
                         </HBox>
                      </children>
                   </VBox>
-                  <VBox fx:id="contentFecha" prefHeight="35.0" prefWidth="322.0">
+                  <VBox fx:id="contentFecha" alignment="TOP_CENTER" prefHeight="37.0" prefWidth="279.0">
                      <children>
                         <HBox prefHeight="28.0" prefWidth="343.0">
                            <children>
@@ -117,7 +123,7 @@
                         </HBox>
                      </children>
                   </VBox>
-                  <VBox fx:id="contentRedSocial" prefHeight="33.0" prefWidth="309.0">
+                  <VBox fx:id="contentRedSocial" alignment="TOP_CENTER" prefHeight="37.0" prefWidth="279.0">
                      <children>
                         <HBox prefHeight="28.0" prefWidth="343.0">
                            <children>

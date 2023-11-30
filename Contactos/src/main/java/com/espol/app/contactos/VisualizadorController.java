@@ -7,7 +7,13 @@ package com.espol.app.contactos;
 import com.espol.app.contactos.modelo.Atributo;
 import com.espol.app.contactos.modelo.Contacto;
 import com.espol.app.contactos.modelo.Foto;
+import com.espol.app.contactos.modelo.Persona;
 import com.espol.app.contactos.modelo.Tipo;
+import static com.espol.app.contactos.modelo.Tipo.CORREO;
+import static com.espol.app.contactos.modelo.Tipo.DIRECCION;
+import static com.espol.app.contactos.modelo.Tipo.FECHA;
+import static com.espol.app.contactos.modelo.Tipo.REDSOCIAL;
+import static com.espol.app.contactos.modelo.Tipo.TELEFONO;
 import com.espol.app.contactos.modelo.UsuarioSingleton;
 import com.espol.app.contactos.utilidades.List;
 import java.io.IOException;
@@ -86,10 +92,17 @@ public class TertiaryController implements Initializable {
     }
 
     public void actualizar(Contacto c) {
-        nombre.setText(c.getNombre());
+        if (!c.isEsEmpresa()){
+            Persona persona = (Persona) c;
+            nombre.setText(persona.getNombre()+" "+persona.getApellidos());
+        } else {            
+            nombre.setText(c.getNombre());
+        }
+        
 
         List<Foto> fotos = c.getFotos();
         fotoActual = fotos.get(0);
+        
         if (fotoActual != null) {
             Image imagen = new Image(fotoActual.getUrl());
             fotoView.setImage(imagen);
@@ -97,36 +110,40 @@ public class TertiaryController implements Initializable {
             nextFoto.setOnAction(ec -> {
                 fotoActual = fotos.getNext(fotoActual);
                 Image imagenNext = new Image(fotoActual.getUrl());
+                fotoView.setImage(imagenNext);                               
+            });
+            
+            farmerFoto.setOnAction(eh -> {
+                fotoActual = fotos.getPrevious(fotoActual);
+                Image imagenNext = new Image(fotoActual.getUrl());
                 fotoView.setImage(imagenNext);
-
             });
         }else{
             System.out.println("No tiene fotos");
         }
-
-        farmerFoto.setOnAction(eh -> {
-            fotoActual = fotos.getPrevious(fotoActual);
-            Image imagenNext = new Image(fotoActual.getUrl());
-            fotoView.setImage(imagenNext);
-        });
 
         List<Atributo> atributos = c.getAtributos();
 
         caja.getChildren().clear();
         caja.setSpacing(10);
 
+        /*
         VBox telefonos = new VBox();
         telefonos.getChildren().add(new Label("Telefonos:"));
+        
         VBox redesSociales = new VBox();
         redesSociales.getChildren().add(new Label("Redes Sociales:"));
+        
         VBox fechas = new VBox();
         fechas.getChildren().add(new Label("Fechas:"));
+        
         VBox direcciones = new VBox();
         direcciones.getChildren().add(new Label("Direcciones:"));
+        
         VBox correos = new VBox();
         correos.getChildren().add(new Label("Correos:"));
 
-        caja.getChildren().addAll(telefonos, redesSociales, fechas, direcciones, correos);
+        caja.getChildren().addAll(telefonos, redesSociales, fechas, direcciones, correos);*/
 
         for (Atributo at : atributos) {
             HBox atributosBox = new HBox();
@@ -139,6 +156,10 @@ public class TertiaryController implements Initializable {
             if (null != tipo) {
                 switch (tipo) {
                     case TELEFONO:
+                        VBox telefonos = new VBox();
+                        telefonos.getChildren().add(new Label("Telefonos:"));
+                        caja.getChildren().add(telefonos);
+                        
                         etiqueta = at.getNombre();
                         valor = at.getValor();
                         atributo = new Label(etiqueta + " - " + valor);
@@ -146,6 +167,10 @@ public class TertiaryController implements Initializable {
                         telefonos.getChildren().add(atributosBox);
                         break;
                     case REDSOCIAL:
+                        VBox redesSociales = new VBox();
+                        redesSociales.getChildren().add(new Label("Redes Sociales:"));
+                        caja.getChildren().add(redesSociales);
+                        
                         etiqueta = at.getNombre();
                         valor = at.getValor();
                         atributo = new Label(etiqueta + " - " + valor);
@@ -153,6 +178,10 @@ public class TertiaryController implements Initializable {
                         redesSociales.getChildren().add(atributosBox);
                         break;
                     case FECHA:
+                        VBox fechas = new VBox();
+                        fechas.getChildren().add(new Label("Fechas:"));
+                        caja.getChildren().add(fechas);
+                        
                         etiqueta = at.getNombre();
                         valor = at.getValor();
                         atributo = new Label(etiqueta + " - " + valor);
@@ -160,6 +189,10 @@ public class TertiaryController implements Initializable {
                         fechas.getChildren().add(atributosBox);
                         break;
                     case DIRECCION:
+                        VBox direcciones = new VBox();
+                        direcciones.getChildren().add(new Label("Direcciones:"));
+                        caja.getChildren().add(direcciones);
+                        
                         etiqueta = at.getNombre();
                         valor = at.getValor();
                         atributo = new Label(etiqueta + " - " + valor);
@@ -167,6 +200,10 @@ public class TertiaryController implements Initializable {
                         direcciones.getChildren().add(atributosBox);
                         break;
                     case CORREO:
+                        VBox correos = new VBox();
+                        correos.getChildren().add(new Label("Correos:"));
+                        caja.getChildren().add(correos);
+                        
                         etiqueta = at.getNombre();
                         valor = at.getValor();
                         atributo = new Label(etiqueta + " - " + valor);
@@ -196,9 +233,12 @@ public class TertiaryController implements Initializable {
             favorito.getChildren().add(favoritoView);
         }
 
-        String descripción = c.getDescripcion();
-        Label mapas = new Label("CASA");
-        mapa.setText("CASA");
+        String descripcion = c.getDescripcion();
+        if (descripcion != null) {            
+            Label mapas = new Label("CASA");
+            mapa.setText("CASA");
+        }
+        
 
         /*
         WebView webView = new WebView();
@@ -219,5 +259,4 @@ public class TertiaryController implements Initializable {
     @FXML
     private void editarContacto(ActionEvent event) {
     }
-
 }

@@ -21,6 +21,8 @@ public class Contacto implements Serializable{
     private boolean esFavorito;
     private String descripcion;
     private boolean esEmpresa;
+    
+    private Etiqueta etiqueta;
 
     public Contacto() {
         this.atributos = new ArrayList<>();
@@ -93,5 +95,20 @@ public class Contacto implements Serializable{
         this.esEmpresa = esEmpresa;
     }
     
+    public List<Foto> copy() {
+        List<Foto> copia = new DoublyCircularLinkedList<>();
+        for(Foto ft : this.getFotos()){
+            copia.add(ft);
+        }
+        return copia;
+    }    
+
+    public Etiqueta getEtiqueta() {
+        return etiqueta;
+    }
+
+    public void setEtiqueta(Etiqueta etiqueta) {
+        this.etiqueta = etiqueta;
+    }
     
 }
