@@ -68,6 +68,24 @@ public class Usuario implements Serializable{
     public String toString() {
         return "Usuario{" + "nombre=" + nombre + ", user=" + user + ", password=" + password + ", contactos=" + contactos + '}';
     }
+    public List<Contacto> getEmpresas (){
+        List<Contacto> lista = new DoublyCircularLinkedList<>();
+        for(Contacto c: contactos){
+            if(c.isEsEmpresa()){
+                lista.add(c);
+            }
+        }
+        return lista;
+    }
+    public List<Contacto> getPersonas (){
+        List<Contacto> lista = new DoublyCircularLinkedList<>();
+        for(Contacto c: contactos){
+            if(!c.isEsEmpresa()){
+                lista.add(c);
+            }
+        }
+        return lista;
+    }
     
    
     

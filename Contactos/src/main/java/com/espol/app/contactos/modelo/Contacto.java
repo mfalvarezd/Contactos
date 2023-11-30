@@ -93,4 +93,5 @@ public class Contacto implements Serializable{
         this.esEmpresa = esEmpresa;
     }
     
+    
 }

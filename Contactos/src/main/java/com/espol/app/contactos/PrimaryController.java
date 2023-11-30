@@ -123,7 +123,7 @@ public class PrimaryController implements Initializable{
         
         btnVolver.setOnAction(ev -> {
             try {
-                App.setRoot("primary");
+                App.setRoot("logIn");
             } catch (IOException ex) {
                 ex.printStackTrace();
             }

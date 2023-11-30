@@ -2,9 +2,12 @@ package com.espol.app.contactos;
 
 import com.espol.app.contactos.modelo.Atributo;
 import com.espol.app.contactos.modelo.Contacto;
+import com.espol.app.contactos.modelo.Empresa;
 import com.espol.app.contactos.modelo.Persona;
 import com.espol.app.contactos.modelo.Usuario;
 import com.espol.app.contactos.modelo.UsuarioSingleton;
+import com.espol.app.contactos.utilidades.ArrayList;
+import com.espol.app.contactos.utilidades.DoublyCircularLinkedList;
 import com.espol.app.contactos.utilidades.List;
 import com.espol.app.contactos.utilidades.ManejoArchivos;
 import java.io.IOException;
@@ -13,11 +16,15 @@ import java.util.Comparator;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.ResourceBundle;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
@@ -44,12 +51,24 @@ public class PrincipalContactosController implements Initializable {
     private Button salir;
     @FXML
     private TextField txtBuscar;
+    private List<Contacto> listaContactos;
+    private List<Contacto> filtrada;
+    @FXML
+    private ComboBox<String> cmbFiltros;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+
+        ObservableList<String> opciones = FXCollections.observableArrayList(
+                "Apellido y primer nombre", "Empresa", "Tipo Contacto"
+        );
+
+        cmbFiltros.setItems(opciones);
         
+        
+
         userLogIn = UsuarioSingleton.getInstancia();
-        List<Contacto> listaContactos = userLogIn.getContactos();
+        listaContactos = userLogIn.getContactos();
         txtUsuario.setText(userLogIn.getNombre());
         System.out.println("El usuario que inicio se sesion es ");
         System.out.println(userLogIn.getNombre());
@@ -57,20 +76,47 @@ public class PrincipalContactosController implements Initializable {
         System.out.println(userLogIn.getContactos());
         contactos.setSpacing(8);
         actualizarLista(listaContactos);
-
+        cmbFiltros.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            System.out.println(newValue);
+            // Manejar el evento de selección
+            if (newValue != null) {
+                // Imprimir mensajes según la opción seleccionada
+                switch (newValue) {
+                    case "Apellido y primer nombre":
+                        filtrarLista("nombres");
+                        System.out.println("Entro aqui");
+                        break;
+                    case "Empresa":
+                        System.out.println("Entro a empresa");
+                        filtrarLista("Empresa");
+                        break;
+                    case "Tipo Contacto":
+                        filtrarLista("Tipo");
+                        break;
+                    // Añadir más casos según sea necesario
+                }
+            }
+        });
         
 
     }
-    private void actualizarLista(List<Contacto> listaContactos){
-        for (Contacto c : listaContactos) {
+
+    private void actualizarLista(List<Contacto> lista) {
+        contactos.getChildren().clear();
+        for (Contacto c : lista) {
             HBox caja = new HBox();
             Separator sp = new Separator(Orientation.HORIZONTAL);
             sp.setPrefWidth(contactos.getWidth());
 
             String nombre_completo = c.getNombre();
             Label nombre = new Label(nombre_completo);
-            nombre.setOnMouseEntered((event) -> {nombre.setEffect(new DropShadow());});
-            nombre.setOnMouseExited((event) -> {nombre.setEffect(null);contactos.requestFocus();});
+            nombre.setOnMouseEntered((event) -> {
+                nombre.setEffect(new DropShadow());
+            });
+            nombre.setOnMouseExited((event) -> {
+                nombre.setEffect(null);
+                contactos.requestFocus();
+            });
             nombre.setPadding(new Insets(7, 0, 0, 0));
 
             if (c.getFotos() != null && !c.getFotos().isEmpty()) {
@@ -85,7 +131,7 @@ public class PrincipalContactosController implements Initializable {
                 caja.setPadding(new Insets(0, 0, 0, 10));
                 caja.getChildren().addAll(foto, nombre);
 
-                contactos.getChildren().addAll(caja,sp);
+                contactos.getChildren().addAll(caja, sp);
             } else {
                 System.out.println("No tiene foto");
                 ImageView foto = new ImageView();
@@ -99,7 +145,7 @@ public class PrincipalContactosController implements Initializable {
                 caja.setPadding(new Insets(0, 0, 0, 10));
                 caja.getChildren().addAll(foto, nombre);
 
-                contactos.getChildren().addAll(caja,sp);
+                contactos.getChildren().addAll(caja, sp);
                 // Lógica para manejar cuando no hay fotos disponibles
             }
 
@@ -112,7 +158,7 @@ public class PrincipalContactosController implements Initializable {
                 }
             });
         }
-        
+
     }
 
     @FXML
@@ -171,33 +217,87 @@ public class PrincipalContactosController implements Initializable {
          */
     }
     
-    
-    private void filtrarLista(){
-        String parametro = txtBuscar.getText();
+
+    private void filtrarLista(String parametro) {
+        
         Comparator<Contacto> comparador;
-        switch (parametro){
-            case "apellido":
-                comparador = new Comparator<Contacto>() {
-            @Override
-            public int compare(Contacto c1, Contacto c2) {
-                if(c1 instanceof Persona && c2 instanceof Persona){
-                    Persona p1 = (Persona) c1;
-                    Persona p2 = (Persona) c2;
+        List<Contacto> nuevaLista = new DoublyCircularLinkedList<>();
+        Queue<Contacto> pcola; 
+        switch (parametro) {
+            case "nombres":
+                List<Contacto> personas = userLogIn.getPersonas();
+                comparador = (Contacto c1, Contacto c2) -> {
+                    if (c1 instanceof Persona && c2 instanceof Persona) {
+                        Persona p1 = (Persona) c1;
+                        Persona p2 = (Persona) c2;
+                        String[] nombres1 = p1.getNombre().split(" ");
+                        String[] nombres2 = p2.getNombre().split(" ");
+                        String[] apellido1 = p1.getApellidos().split(" ");
+                        String[] apellido2 = p2.getApellidos().split(" ");
+                        int apellido = apellido1[0].compareTo(apellido2[0]);
+                        int nombre = nombres1[0].compareTo(nombres2[0]);
+                        if(apellido==0){
+                            return nombre;
+                        }
+                        
+                        return apellido;
+
+                    }
+                    return -1;
+                };
+                pcola = new PriorityQueue<>(comparador);
+                for(Contacto c: personas){
+                    pcola.offer(c);
                 }
-                return 0;
-            }
-        };
+                while(!pcola.isEmpty()){
+                    nuevaLista.add(pcola.poll());
+                }
+                
+                filtrada = nuevaLista;
+                actualizarLista(filtrada);
+                
+
+                break;
+            case "Empresa":
+                List<Contacto> empresas = userLogIn.getEmpresas();
+                comparador = (Contacto c1, Contacto c2)->{
+                  return c1.getNombre().compareTo(c2.getNombre());
+                    
+                };
+                pcola = new PriorityQueue<>(comparador);
+                for(Contacto c: empresas){
+                    pcola.offer(c);
+                }
+                 while(!pcola.isEmpty()){
+                    nuevaLista.add(pcola.poll());
+                }
+                
+                filtrada = nuevaLista;
+                actualizarLista(filtrada);
+                break;
+            case "Tipo":
+                comparador = (Contacto c1, Contacto c2) -> Boolean.compare(c1.isEsEmpresa(), c2.isEsEmpresa());
+                pcola = new PriorityQueue<>(comparador);
+                for(Contacto c: listaContactos){
+                    pcola.offer(c);
+                }
+                 while(!pcola.isEmpty()){
+                    nuevaLista.add(pcola.poll());
+                }
+                
+                filtrada = nuevaLista;
+                actualizarLista(filtrada);
+                
+                
                 
                 break;
-            
+
         }
-        
-   
-        
-        
-        
+
     }
-    
-    
-    
+
+    @FXML
+    private void Filtrar(ActionEvent event) {
+    }
+
 }
