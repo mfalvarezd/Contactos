@@ -12,7 +12,6 @@ import java.io.Serializable;
 /**
  *
  * @author mfalvarez
- * @param <T>
  */
 public class Contacto implements Serializable{
     private String nombre;  
@@ -21,6 +20,7 @@ public class Contacto implements Serializable{
     private List<Contacto> contactos_relacionados;
     private boolean esFavorito;
     private String descripcion;
+    private boolean esEmpresa;
 
     public Contacto() {
         this.atributos = new ArrayList<>();
@@ -84,4 +84,13 @@ public class Contacto implements Serializable{
     public String toString() {
         return "Contacto{" + "nombre=" + nombre + ", atributos=" + atributos + ", fotos=" + fotos + ", contactos_relacionados=" + contactos_relacionados + ", esFavorito=" + esFavorito + ", descripcion=" + descripcion + '}';
     }
+
+    public boolean isEsEmpresa() {
+        return esEmpresa;
+    }
+
+    public void setEsEmpresa(boolean esEmpresa) {
+        this.esEmpresa = esEmpresa;
+    }
+    
 }

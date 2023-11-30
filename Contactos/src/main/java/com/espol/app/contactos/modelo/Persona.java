@@ -15,6 +15,7 @@ public class Persona extends Contacto {
 
     public Persona() {
         super();
+        this.setEsEmpresa(false);
     }
     
     @Override

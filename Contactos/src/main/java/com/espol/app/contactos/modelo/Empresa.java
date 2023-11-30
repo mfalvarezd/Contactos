@@ -12,7 +12,10 @@ public class Empresa extends Contacto {
 
     public Empresa() {
         super();
+        this.setEsEmpresa(true);
+      
     }
+
     
     @Override
     public String toString() {

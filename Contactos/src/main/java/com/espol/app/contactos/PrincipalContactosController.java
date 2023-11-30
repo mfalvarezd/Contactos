@@ -2,11 +2,16 @@ package com.espol.app.contactos;
 
 import com.espol.app.contactos.modelo.Atributo;
 import com.espol.app.contactos.modelo.Contacto;
+import com.espol.app.contactos.modelo.Persona;
 import com.espol.app.contactos.modelo.Usuario;
 import com.espol.app.contactos.modelo.UsuarioSingleton;
+import com.espol.app.contactos.utilidades.List;
 import com.espol.app.contactos.utilidades.ManejoArchivos;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Comparator;
+import java.util.PriorityQueue;
+import java.util.Queue;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -15,6 +20,7 @@ import javafx.geometry.Orientation;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
+import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -36,19 +42,27 @@ public class PrincipalContactosController implements Initializable {
     private Label txtUsuario;
     @FXML
     private Button salir;
+    @FXML
+    private TextField txtBuscar;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
         userLogIn = UsuarioSingleton.getInstancia();
+        List<Contacto> listaContactos = userLogIn.getContactos();
         txtUsuario.setText(userLogIn.getNombre());
         System.out.println("El usuario que inicio se sesion es ");
         System.out.println(userLogIn.getNombre());
         System.out.println(userLogIn.getUser());
         System.out.println(userLogIn.getContactos());
         contactos.setSpacing(8);
+        actualizarLista(listaContactos);
 
-        for (Contacto c : userLogIn.getContactos()) {
+        
+
+    }
+    private void actualizarLista(List<Contacto> listaContactos){
+        for (Contacto c : listaContactos) {
             HBox caja = new HBox();
             Separator sp = new Separator(Orientation.HORIZONTAL);
             sp.setPrefWidth(contactos.getWidth());
@@ -98,7 +112,7 @@ public class PrincipalContactosController implements Initializable {
                 }
             });
         }
-
+        
     }
 
     @FXML
@@ -156,4 +170,34 @@ public class PrincipalContactosController implements Initializable {
         }
          */
     }
+    
+    
+    private void filtrarLista(){
+        String parametro = txtBuscar.getText();
+        Comparator<Contacto> comparador;
+        switch (parametro){
+            case "apellido":
+                comparador = new Comparator<Contacto>() {
+            @Override
+            public int compare(Contacto c1, Contacto c2) {
+                if(c1 instanceof Persona && c2 instanceof Persona){
+                    Persona p1 = (Persona) c1;
+                    Persona p2 = (Persona) c2;
+                }
+                return 0;
+            }
+        };
+                
+                break;
+            
+        }
+        
+   
+        
+        
+        
+    }
+    
+    
+    
 }
