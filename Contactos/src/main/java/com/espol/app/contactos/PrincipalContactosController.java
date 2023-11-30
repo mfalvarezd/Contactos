@@ -60,7 +60,7 @@ public class PrincipalContactosController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
 
         ObservableList<String> opciones = FXCollections.observableArrayList(
-                "Apellido y primer nombre", "Empresa", "Tipo Contacto"
+                "Apellido y primer nombre", "Empresa", "Tipo Contacto","Default"
         );
 
         cmbFiltros.setItems(opciones);
@@ -77,10 +77,9 @@ public class PrincipalContactosController implements Initializable {
         contactos.setSpacing(8);
         actualizarLista(listaContactos);
         cmbFiltros.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            System.out.println(newValue);
-            // Manejar el evento de selección
+
             if (newValue != null) {
-                // Imprimir mensajes según la opción seleccionada
+       
                 switch (newValue) {
                     case "Apellido y primer nombre":
                         filtrarLista("nombres");
@@ -93,7 +92,11 @@ public class PrincipalContactosController implements Initializable {
                     case "Tipo Contacto":
                         filtrarLista("Tipo");
                         break;
-                    // Añadir más casos según sea necesario
+                    case "Default":
+                        contactos.getChildren().clear();
+                        actualizarLista(listaContactos);
+                        break;
+                    
                 }
             }
         });
