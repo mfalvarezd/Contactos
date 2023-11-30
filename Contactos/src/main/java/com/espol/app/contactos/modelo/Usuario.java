@@ -86,6 +86,16 @@ public class Usuario implements Serializable{
         }
         return lista;
     }
+    public List<Contacto> getFavoritos(){
+        List<Contacto> lista= new DoublyCircularLinkedList<>();
+        for(Contacto c: contactos){
+            if(c.isEsFavorito()){
+                lista.add(c);
+            }
+        }
+        
+        return lista;
+    }
     
    
     

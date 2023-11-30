@@ -261,7 +261,7 @@ public class AggPersonaController implements Initializable {
     }
 
     private void ajustarAlturaVBox() {
-        contentPrincipal.setPrefHeight(contentPrincipal.getPrefHeight() + 20); // Ajusta según sea necesario
+        contentPrincipal.setPrefHeight(contentPrincipal.getPrefHeight() + 25); // Ajusta según sea necesario
     }
 
     @FXML

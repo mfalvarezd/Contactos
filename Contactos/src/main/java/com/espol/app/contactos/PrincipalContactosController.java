@@ -61,12 +61,10 @@ public class PrincipalContactosController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
 
         ObservableList<String> opciones = FXCollections.observableArrayList(
-                "Apellido y primer nombre", "Empresa", "Tipo Contacto","Default"
+                "Apellido y primer nombre", "Empresa", "Tipo Contacto", "Default"
         );
 
         cmbFiltros.setItems(opciones);
-        
-        
 
         userLogIn = UsuarioSingleton.getInstancia();
         listaContactos = userLogIn.getContactos();
@@ -80,7 +78,7 @@ public class PrincipalContactosController implements Initializable {
         cmbFiltros.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
 
             if (newValue != null) {
-       
+
                 switch (newValue) {
                     case "Apellido y primer nombre":
                         filtrarLista("nombres");
@@ -96,13 +94,12 @@ public class PrincipalContactosController implements Initializable {
                     case "Default":
                         contactos.getChildren().clear();
                         actualizarLista(listaContactos);
-                        visualizador=listaContactos;
+                        visualizador = listaContactos;
                         break;
-                    
+
                 }
             }
         });
-        
 
     }
 
@@ -110,17 +107,16 @@ public class PrincipalContactosController implements Initializable {
         contactos.getChildren().clear();
         String nombre_completo;
         for (Contacto c : lista) {
-            if(c instanceof Persona){
+            if (c instanceof Persona) {
                 Persona p = (Persona) c;
-                nombre_completo = c.getNombre()+" "+ p.getApellidos();
-            }else{
+                nombre_completo = c.getNombre() + " " + p.getApellidos();
+            } else {
                 nombre_completo = c.getNombre();
             }
             HBox caja = new HBox();
             Separator sp = new Separator(Orientation.HORIZONTAL);
             sp.setPrefWidth(contactos.getWidth());
 
-            
             Label nombre = new Label(nombre_completo);
             nombre.setOnMouseEntered((event) -> {
                 nombre.setEffect(new DropShadow());
@@ -144,6 +140,7 @@ public class PrincipalContactosController implements Initializable {
                 caja.getChildren().addAll(foto, nombre);
 
                 contactos.getChildren().addAll(caja, sp);
+                ajustarAlturaVBox();
             } else {
                 System.out.println("No tiene foto");
                 ImageView foto = new ImageView();
@@ -158,6 +155,7 @@ public class PrincipalContactosController implements Initializable {
                 caja.getChildren().addAll(foto, nombre);
 
                 contactos.getChildren().addAll(caja, sp);
+                ajustarAlturaVBox();
                 // Lógica para manejar cuando no hay fotos disponibles
             }
 
@@ -197,7 +195,7 @@ public class PrincipalContactosController implements Initializable {
 
     @FXML
     private void visualizar() throws IOException {
-        
+
         App.setRoot("visualizador");
         System.out.println(userLogIn.getContactos());
     }
@@ -229,13 +227,12 @@ public class PrincipalContactosController implements Initializable {
         }
          */
     }
-    
 
     private void filtrarLista(String parametro) {
-        
+
         Comparator<Contacto> comparador;
         List<Contacto> nuevaLista = new DoublyCircularLinkedList<>();
-        Queue<Contacto> pcola; 
+        Queue<Contacto> pcola;
         switch (parametro) {
             case "nombres":
                 List<Contacto> personas = userLogIn.getPersonas();
@@ -249,43 +246,42 @@ public class PrincipalContactosController implements Initializable {
                         String[] apellido2 = p2.getApellidos().split(" ");
                         int apellido = apellido1[0].compareTo(apellido2[0]);
                         int nombre = nombres1[0].compareTo(nombres2[0]);
-                        if(apellido==0){
+                        if (apellido == 0) {
                             return nombre;
                         }
-                        
+
                         return apellido;
 
                     }
                     return -1;
                 };
                 pcola = new PriorityQueue<>(comparador);
-                for(Contacto c: personas){
+                for (Contacto c : personas) {
                     pcola.offer(c);
                 }
-                while(!pcola.isEmpty()){
+                while (!pcola.isEmpty()) {
                     nuevaLista.add(pcola.poll());
                 }
-                
+
                 filtrada = nuevaLista;
                 actualizarLista(filtrada);
                 visualizador = filtrada;
-                
 
                 break;
             case "Empresa":
                 List<Contacto> empresas = userLogIn.getEmpresas();
-                comparador = (Contacto c1, Contacto c2)->{
-                  return c1.getNombre().compareTo(c2.getNombre());
-                    
+                comparador = (Contacto c1, Contacto c2) -> {
+                    return c1.getNombre().compareTo(c2.getNombre());
+
                 };
                 pcola = new PriorityQueue<>(comparador);
-                for(Contacto c: empresas){
+                for (Contacto c : empresas) {
                     pcola.offer(c);
                 }
-                 while(!pcola.isEmpty()){
+                while (!pcola.isEmpty()) {
                     nuevaLista.add(pcola.poll());
                 }
-                
+
                 filtrada = nuevaLista;
                 actualizarLista(filtrada);
                 visualizador = filtrada;
@@ -293,19 +289,17 @@ public class PrincipalContactosController implements Initializable {
             case "Tipo":
                 comparador = (Contacto c1, Contacto c2) -> Boolean.compare(c1.isEsEmpresa(), c2.isEsEmpresa());
                 pcola = new PriorityQueue<>(comparador);
-                for(Contacto c: listaContactos){
+                for (Contacto c : listaContactos) {
                     pcola.offer(c);
                 }
-                 while(!pcola.isEmpty()){
+                while (!pcola.isEmpty()) {
                     nuevaLista.add(pcola.poll());
                 }
-                
+
                 filtrada = nuevaLista;
                 actualizarLista(filtrada);
                 visualizador = filtrada;
-                
-                
-                
+
                 break;
 
         }
@@ -314,6 +308,55 @@ public class PrincipalContactosController implements Initializable {
 
     @FXML
     private void Filtrar(ActionEvent event) {
+    }
+
+    @FXML
+    private void listas(ActionEvent event) {
+        Separator sp = new Separator(Orientation.HORIZONTAL);
+        sp.setPrefWidth(contactos.getWidth());
+        contactos.getChildren().clear();
+        HBox favoritos = new HBox();
+        favoritos.setOnMouseClicked((E)->{mostrarFavoritos();});
+        Label favText = new Label("Favoritos");
+        favText.setOnMouseEntered((evt) -> {
+            favText.setEffect(new DropShadow());
+        });
+        favText.setOnMouseExited((evt) -> {
+            favText.setEffect(null);
+            contactos.requestFocus();
+        });
+        favText.setPadding(new Insets(7, 0, 0, 0));
+       
+        favoritos.getChildren().add(favText);
+        HBox general = new HBox();
+        Label generalText = new Label("Todos mis contactos");
+        generalText.setOnMouseEntered((evt) -> {
+            generalText.setEffect(new DropShadow());
+        });
+        generalText.setOnMouseExited((evt) -> {
+            generalText.setEffect(null);
+            contactos.requestFocus();
+        });
+        generalText.setPadding(new Insets(7, 0, 0, 0));
+        favText.setOnMouseClicked((evento) -> {
+            mostrarFavoritos();
+        });
+        general.setOnMouseClicked((ev) -> {
+            actualizarLista(userLogIn.getContactos());
+        });
+        general.getChildren().add(generalText);
+        contactos.getChildren().addAll(favoritos,sp, general);
+
+    }
+
+    private void ajustarAlturaVBox() {
+        contactos.setPrefHeight(contactos.getPrefHeight() + 1); // Ajusta según sea necesario
+    }
+
+    private void mostrarFavoritos() {
+
+        listaContactos = userLogIn.getFavoritos();
+        actualizarLista(listaContactos);
     }
 
 }

@@ -54,7 +54,7 @@ public class VisualizadorController implements Initializable {
     @FXML
     private Button anterior;
 
-    private static List<Contacto> contactos = PrincipalContactosController.visualizador;
+    private static List<Contacto> contactos;
 
     private Foto fotoActual;
     private Contacto c;
@@ -69,6 +69,7 @@ public class VisualizadorController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        contactos = PrincipalContactosController.visualizador;
         if (!contactos.isEmpty()) {
             informacion.getChildren().add(2, nombre);
             informacion.getChildren().add(3, caja);
