@@ -3,6 +3,7 @@ package com.espol.app.contactos;
 import com.espol.app.contactos.modelo.Atributo;
 import com.espol.app.contactos.modelo.Contacto;
 import com.espol.app.contactos.modelo.Empresa;
+import com.espol.app.contactos.modelo.Etiqueta;
 import com.espol.app.contactos.modelo.Persona;
 import com.espol.app.contactos.modelo.Usuario;
 import com.espol.app.contactos.modelo.UsuarioSingleton;
@@ -38,7 +39,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 
-public class PrincipalContactosController implements Initializable {   
+public class PrincipalContactosController implements Initializable {
 
     @FXML
     private VBox contactos;
@@ -52,17 +53,16 @@ public class PrincipalContactosController implements Initializable {
     private TextField txtBuscar;
     @FXML
     private ComboBox<String> cmbFiltros;
-    
+
     private static Usuario userLogIn;
     private List<Contacto> listaContactos;
     protected static List<Contacto> visualizador;
     private List<Contacto> filtrada;
 
-
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         ObservableList<String> opciones = FXCollections.observableArrayList(
-                "Apellido y primer nombre", "Empresa", "Tipo Contacto", "Default"
+                "Apellido y primer nombre", "Empresa", "Amigos", "Familia", "Trabajo", "Tipo Contacto", "Default"
         );
 
         cmbFiltros.setItems(opciones);
@@ -70,11 +70,11 @@ public class PrincipalContactosController implements Initializable {
         userLogIn = UsuarioSingleton.getInstancia();
         listaContactos = userLogIn.getContactos();
 
-        txtUsuario.setText("Bienvenido "+userLogIn.getNombre());
-        
+        txtUsuario.setText("Bienvenido " + userLogIn.getNombre());
+
         Font nuevaFuente = new Font("Georgia", 15);
-        txtUsuario.setFont(nuevaFuente);             
-        
+        txtUsuario.setFont(nuevaFuente);
+
         System.out.println("El usuario que inicio se sesion es ");
         System.out.println(userLogIn.getNombre());
         System.out.println(userLogIn.getUser());
@@ -101,6 +101,15 @@ public class PrincipalContactosController implements Initializable {
                         contactos.getChildren().clear();
                         actualizarLista(listaContactos);
                         visualizador = listaContactos;
+                        break;
+                    case "Familia":
+                        filtrarLista("Familia");
+                        break;
+                    case "Amigos":
+                        filtrarLista("Amigos");
+                        break;
+                    case "Trabajo":
+                        filtrarLista("Trabajo");
                         break;
                 }
             }
@@ -179,17 +188,17 @@ public class PrincipalContactosController implements Initializable {
     @FXML
     private void agregarP() throws IOException {
         System.out.println("HOLA MUNDO");
-        App.setRoot("aggPersona");        
+        App.setRoot("aggPersona");
     }
 
     @FXML
     private void visualizar() throws IOException {
-        if (userLogIn.getContactos().size()==0) {
+        if (userLogIn.getContactos().size() == 0) {
             this.alerta();
-        } else {            
-            this.visualizador = userLogIn.getContactos();    
+        } else {
+            this.visualizador = userLogIn.getContactos();
             VisualizadorController.c = null;
-            App.setRoot("visualizador");                        
+            App.setRoot("visualizador");
         }
     }
 
@@ -275,6 +284,73 @@ public class PrincipalContactosController implements Initializable {
                 visualizador = filtrada;
 
                 break;
+            case "Familia":
+
+                List<Contacto> familia = new DoublyCircularLinkedList<>();
+                for (Contacto c : userLogIn.getContactos()) {
+                    if (c.getEtiqueta()==(Etiqueta.Familia)) {
+                        familia.add(c);
+                    }
+                }
+                comparador = (c1, c2) -> {
+                    return c1.getNombre().compareTo(c2.getNombre());
+                };
+                pcola = new PriorityQueue<>(comparador);
+                for (Contacto c : familia) {
+                    pcola.offer(c);
+                }
+                while (!pcola.isEmpty()) {
+                    nuevaLista.add(pcola.poll());
+                }
+
+                filtrada = nuevaLista;
+                actualizarLista(filtrada);
+                visualizador = filtrada;
+                break;
+            case "Amigos":
+                List<Contacto> amigos = new DoublyCircularLinkedList<>();
+                for (Contacto c : userLogIn.getContactos()) {
+                    if (c.getEtiqueta()==(Etiqueta.Amigos)) {
+                        amigos.add(c);
+                    }
+                }
+                comparador = (c1, c2) -> {
+                    return c1.getNombre().compareTo(c2.getNombre());
+                };
+                pcola = new PriorityQueue<>(comparador);
+                for (Contacto c : amigos) {
+                    pcola.offer(c);
+                }
+                while (!pcola.isEmpty()) {
+                    nuevaLista.add(pcola.poll());
+                }
+
+                filtrada = nuevaLista;
+                actualizarLista(filtrada);
+                visualizador = filtrada;
+                break;
+            case "Trabajo":
+                List<Contacto> trabajo = new DoublyCircularLinkedList<>();
+                for (Contacto c : userLogIn.getContactos()) {
+                    if (c.getEtiqueta()==(Etiqueta.Trabajo)) {
+                        trabajo.add(c);
+                    }
+                }
+                comparador = (c1, c2) -> {
+                    return c1.getNombre().compareTo(c2.getNombre());
+                };
+                pcola = new PriorityQueue<>(comparador);
+                for (Contacto c : trabajo) {
+                    pcola.offer(c);
+                }
+                while (!pcola.isEmpty()) {
+                    nuevaLista.add(pcola.poll());
+                }
+
+                filtrada = nuevaLista;
+                actualizarLista(filtrada);
+                visualizador = filtrada;
+                break;
         }
     }
 
@@ -288,7 +364,9 @@ public class PrincipalContactosController implements Initializable {
         sp.setPrefWidth(contactos.getWidth());
         contactos.getChildren().clear();
         HBox favoritos = new HBox();
-        favoritos.setOnMouseClicked((E)->{mostrarFavoritos();});
+        favoritos.setOnMouseClicked((E) -> {
+            mostrarFavoritos();
+        });
         Label favText = new Label("Favoritos");
         favText.setOnMouseEntered((evt) -> {
             favText.setEffect(new DropShadow());
@@ -298,7 +376,7 @@ public class PrincipalContactosController implements Initializable {
             contactos.requestFocus();
         });
         favText.setPadding(new Insets(7, 0, 0, 0));
-       
+
         favoritos.getChildren().add(favText);
         HBox general = new HBox();
         Label generalText = new Label("Todos mis contactos");
@@ -317,7 +395,7 @@ public class PrincipalContactosController implements Initializable {
             actualizarLista(userLogIn.getContactos());
         });
         general.getChildren().add(generalText);
-        contactos.getChildren().addAll(favoritos,sp, general);
+        contactos.getChildren().addAll(favoritos, sp, general);
     }
 
     private void ajustarAlturaVBox() {
@@ -328,12 +406,12 @@ public class PrincipalContactosController implements Initializable {
         listaContactos = userLogIn.getFavoritos();
         actualizarLista(listaContactos);
     }
-    
+
     private void alerta() {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Advertencia!!");
         alert.setHeaderText(null);
-        alert.setContentText("No hay contactos");       
+        alert.setContentText("No hay contactos");
         alert.showAndWait();
-    }    
+    }
 }
