@@ -66,6 +66,10 @@
                   </Button>                  
                </children>
             </HBox>
+            <Button cancelButton="true" mnemonicParsing="false" onAction="#eliminarcontacto" text="Eliminar contacto" textAlignment="CENTER" textFill="#830000" textOverrun="LEADING_ELLIPSIS">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font></Button>
          </children>
       </VBox>
    </children>
