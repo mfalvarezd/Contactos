@@ -114,5 +114,22 @@ public class Contacto implements Serializable{
     public void setEtiqueta(Etiqueta etiqueta) {
         this.etiqueta = etiqueta;
     }
-    
+
+    public void eliminarRelacion(Relacion r) {                
+        this.contactos_relacionados.remove(r);        
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        
+        Contacto contacto = (Contacto) o;
+        String nombreC = contacto.getNombre();
+        return nombreC.equals(this.getNombre());
+    }      
 }

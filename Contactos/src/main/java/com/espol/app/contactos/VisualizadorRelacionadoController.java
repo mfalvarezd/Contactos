@@ -16,9 +16,11 @@ import static com.espol.app.contactos.modelo.Tipo.FECHA;
 import static com.espol.app.contactos.modelo.Tipo.REDSOCIAL;
 import static com.espol.app.contactos.modelo.Tipo.TELEFONO;
 import com.espol.app.contactos.utilidades.List;
+import com.espol.app.contactos.utilidades.ManejoArchivos;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -51,7 +53,7 @@ public class VisualizadorRelacionadoController implements Initializable {
     private Button siguiente;
     
     private Foto fotoActual;
-    public static Contacto c;
+    public static Relacion relacion;
     protected static Contacto respaldo;
     
     Label nombre = new Label();
@@ -63,7 +65,9 @@ public class VisualizadorRelacionadoController implements Initializable {
         informacion.getChildren().add(nombre);        
         informacion.getChildren().add(favorito);      
         informacion.getChildren().add(caja);
-
+        
+        Contacto c = relacion.getContacto();
+        
         if (!c.isEsEmpresa()){
             Persona persona = (Persona) c;
             nombre.setText(persona.getNombre()+" "+persona.getApellidos());
@@ -187,13 +191,21 @@ public class VisualizadorRelacionadoController implements Initializable {
     }
     
     @FXML
-    private void regresar() throws IOException {
-        VisualizadorController.c = respaldo;
-        App.setRoot("visualizador");
+    private void regresar() throws IOException {       
+        Platform.runLater(() -> {
+            try {
+                VisualizadorController.c = respaldo;
+                App.setRoot("visualizador");
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        });        
+
     }    
 
     @FXML
     private void eliminarRelacionado(ActionEvent event) throws IOException {
-        System.out.println("+++++++++++++++ELIMINAR+++++++++++++++++");         
+        VisualizadorController.c.eliminarRelacion(relacion);        
+        this.regresar();
     }    
 }

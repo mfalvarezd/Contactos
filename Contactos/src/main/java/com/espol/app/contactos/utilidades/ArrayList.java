@@ -239,6 +239,12 @@ public class ArrayList<E> implements List<E>, Serializable {
 
     @Override
     public E remove(E elemento) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        int indice = 0;
+        for (int i = 0; i < effectiveSize; i++) {
+            if (elements[i].equals(elemento)) {
+                indice = i;
+            }
+        }
+        return this.remove(indice);
     }
 }

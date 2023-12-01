@@ -234,7 +234,7 @@ public class VisualizadorController implements Initializable {
             contacto.setOnMouseClicked(eh -> {
                 try {
                     VisualizadorRelacionadoController.respaldo = c;
-                    VisualizadorRelacionadoController.c = r.getContacto();
+                    VisualizadorRelacionadoController.relacion = r;
                     App.setRoot("visualizadorRelacionado");
                 } catch (IOException ex) {
                     ex.printStackTrace();
