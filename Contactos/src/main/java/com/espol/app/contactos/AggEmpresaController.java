@@ -9,6 +9,8 @@ import com.espol.app.contactos.modelo.Contacto;
 import com.espol.app.contactos.modelo.Empresa;
 import com.espol.app.contactos.modelo.Etiqueta;
 import com.espol.app.contactos.modelo.Foto;
+import com.espol.app.contactos.modelo.Persona;
+import com.espol.app.contactos.modelo.Relacion;
 import com.espol.app.contactos.modelo.Tipo;
 import com.espol.app.contactos.modelo.Usuario;
 import com.espol.app.contactos.modelo.UsuarioSingleton;
@@ -85,20 +87,25 @@ public class AggEmpresaController implements Initializable {
     private CheckBox esFavorito;
     @FXML
     private ComboBox<Etiqueta> boxEtiqueta;
-    
-    private int MAXTELF = 3;
-    private int MAXCORREO = 3;
-    private int MAXDIC = 3;
-    private int MAXFECHA = 3;
-    private int MAXREDSOCIAL = 3;
-    
+    @FXML
+    private Button btnContacRela;
+    @FXML
+    private VBox contentRelacion;
     @FXML
     private VBox contentRedSocial;
     @FXML
     private Button btnRedSocial;
     @FXML
     private ScrollPane scrollPane;
+
     
+    private int MAXTELF = 3;
+    private int MAXCORREO = 3;
+    private int MAXDIC = 3;
+    private int MAXFECHA = 3;
+    private int MAXREDSOCIAL = 3;
+    private int MAXRELACION = 3;
+        
     private Usuario usuarioLogeado;
     
     private DoublyCircularLinkedList<Foto> fotos = new DoublyCircularLinkedList<Foto>();
@@ -140,16 +147,21 @@ public class AggEmpresaController implements Initializable {
     private void aggTelf(ActionEvent event) {               
         if (MAXTELF > 0) {
             MAXTELF--;
+            
             HBox hb = new HBox();
             hb.setSpacing(10);
+            
             TextField tfEtiqueta = new TextField();
-
             tfEtiqueta.setPromptText("Etiqueta");
             tfEtiqueta.setMaxWidth(60);
+            
             TextField telefono = new TextField();
             telefono.setPromptText("Telefono");
+            
             hb.getChildren().addAll(tfEtiqueta, telefono);
+            
             contentTelf.getChildren().addAll(hb);
+            
             ajustarAlturaVBox();
         }
     }
@@ -158,17 +170,21 @@ public class AggEmpresaController implements Initializable {
     private void aggCorreo(ActionEvent event) {
         if (MAXCORREO > 0) {
             MAXCORREO--;
-            HBox hb = new HBox();
+            
+            HBox hb = new HBox();            
             hb.setSpacing(10);
+            
             TextField tfEtiqueta = new TextField();
-
             tfEtiqueta.setPromptText("Etiqueta");
             tfEtiqueta.setMaxWidth(60);
+            
             TextField correo = new TextField();
-
             correo.setPromptText("Correo");
+            
             hb.getChildren().addAll(tfEtiqueta, correo);
+            
             contentCorreo.getChildren().addAll(hb);
+            
             ajustarAlturaVBox();
         }
     }
@@ -177,18 +193,21 @@ public class AggEmpresaController implements Initializable {
     private void aggDic(ActionEvent event) {
         if (MAXDIC > 0) {
             MAXDIC--;
+            
             HBox hb = new HBox();
             hb.setSpacing(10);
+            
             TextField tfEtiqueta = new TextField();
-
             tfEtiqueta.setPromptText("Etiqueta");
             tfEtiqueta.setMaxWidth(60);
+            
             TextField calle1 = new TextField();
             calle1.setPromptText("Calle 1");
 
             hb.getChildren().addAll(tfEtiqueta, calle1);
             
             contentDic.getChildren().addAll(hb);
+            
             ajustarAlturaVBox();
         }
     }
@@ -197,17 +216,21 @@ public class AggEmpresaController implements Initializable {
     private void aggFecha(ActionEvent event) {
         if (MAXFECHA > 0) {
             MAXFECHA--;
+            
             HBox hb = new HBox();
             hb.setSpacing(10);
+            
             TextField tfEtiqueta = new TextField();
-
             tfEtiqueta.setPromptText("Etiqueta");
             tfEtiqueta.setMaxWidth(60);
+            
             DatePicker fecha = new DatePicker();
-
             fecha.setPromptText("Fecha");
+            
             hb.getChildren().addAll(tfEtiqueta, fecha);
+            
             contentFecha.getChildren().addAll(hb);
+            
             ajustarAlturaVBox();
         }
     }
@@ -216,23 +239,23 @@ public class AggEmpresaController implements Initializable {
     private void aggRedSocial(ActionEvent event) {
         if (MAXREDSOCIAL > 0) {
             MAXREDSOCIAL--;
+            
             HBox hb = new HBox();
             hb.setSpacing(10);
+            
             TextField tfEtiqueta = new TextField();
-
             tfEtiqueta.setPromptText("Etiqueta");
             tfEtiqueta.setMaxWidth(60);
+            
             TextField usuario = new TextField();
-
             usuario.setPromptText("Usuario");
+            
             hb.getChildren().addAll(tfEtiqueta, usuario);
+            
             contentRedSocial.getChildren().addAll(hb);
+            
             ajustarAlturaVBox();
         }
-    }
-
-    private void ajustarAlturaVBox() {
-        contentPrincipal.setPrefHeight(contentPrincipal.getPrefHeight() + 25); // Ajusta según sea necesario
     }
 
     @FXML
@@ -269,6 +292,8 @@ public class AggEmpresaController implements Initializable {
 
             nuevoContacto.setEsFavorito(favorito);
 
+            this.agregarRelacionado(nuevoContacto);
+            
             // Agregar atributos (teléfonos, correos, direcciones, etc.) al contacto
             this.agregarAtributos(nuevoContacto);
 
@@ -363,6 +388,66 @@ public class AggEmpresaController implements Initializable {
         }                
     }
 
+    @FXML
+    private void aggRelacionC(ActionEvent event) throws IOException {
+        if (MAXRELACION > 0 && usuarioLogeado.getContactos().size()>0) {
+            MAXRELACION--;
+            
+            HBox hb = new HBox();
+            hb.setSpacing(10);
+            
+            TextField tfEtiqueta = new TextField();
+            tfEtiqueta.setPromptText("Etiqueta");            
+            tfEtiqueta.setMaxWidth(60);
+            
+            ComboBox<String> contacts = new ComboBox<String>();
+            contacts.setPromptText("Contactos");
+            
+            for (Contacto c: usuarioLogeado.getContactos()) {
+                if (c.isEsEmpresa()) {
+                    Empresa emp = (Empresa) c;
+                    contacts.getItems().add(emp.getNombre());
+                } else {
+                    Persona p = (Persona) c;
+                    contacts.getItems().add(p.getNombre()+" "+p.getApellidos());
+                }                
+            }
+                        
+            hb.getChildren().addAll(tfEtiqueta, contacts);
+            
+            contentRelacion.getChildren().addAll(hb);
+            
+            ajustarAlturaVBox();
+        }        
+    }
+    
+    private void agregarRelacionado(Contacto contacto) throws IOException {
+        for (int i = 1; i < contentRelacion.getChildren().size(); i++) {
+            Node node = contentRelacion.getChildren().get(i);
+            if (node instanceof HBox) {
+                HBox hbox = (HBox) node;
+                TextField etiqueta = (TextField) hbox.getChildren().get(0);                
+                ComboBox<String> contact = (ComboBox<String>) hbox.getChildren().get(1);
+                String nombre = contact.getValue();
+                
+                for (Contacto c : usuarioLogeado.getContactos()) {
+                    if (!c.isEsEmpresa()) {
+                        Persona p = (Persona) c;
+                        String n = p.getNombre()+" "+p.getApellidos();
+                        if (n.equals(nombre)){
+                            Relacion r = new Relacion (etiqueta.getText(), c);
+                            contacto.addContacto_relacionado(r);                            
+                        }
+                    }                    
+                }
+            }
+        }
+    }
+    
+    private void ajustarAlturaVBox() {
+        contentPrincipal.setPrefHeight(contentPrincipal.getPrefHeight() + 20); // Ajusta según sea necesario
+    }
+        
     private void alerta() {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Advertencia!!");

@@ -23,6 +23,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -35,14 +36,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Font;
 
-public class PrincipalContactosController implements Initializable {
-
-    private static Usuario userLogIn;
+public class PrincipalContactosController implements Initializable {   
 
     @FXML
     private VBox contactos;
-
     @FXML
     private Button visualizar;
     @FXML
@@ -51,15 +50,17 @@ public class PrincipalContactosController implements Initializable {
     private Button salir;
     @FXML
     private TextField txtBuscar;
-    private List<Contacto> listaContactos;
-    static protected List<Contacto> visualizador;
-    private List<Contacto> filtrada;
     @FXML
     private ComboBox<String> cmbFiltros;
+    
+    private static Usuario userLogIn;
+    private List<Contacto> listaContactos;
+    protected static List<Contacto> visualizador;
+    private List<Contacto> filtrada;
+
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
         ObservableList<String> opciones = FXCollections.observableArrayList(
                 "Apellido y primer nombre", "Empresa", "Tipo Contacto", "Default"
         );
@@ -68,7 +69,12 @@ public class PrincipalContactosController implements Initializable {
 
         userLogIn = UsuarioSingleton.getInstancia();
         listaContactos = userLogIn.getContactos();
-        txtUsuario.setText(userLogIn.getNombre());
+
+        txtUsuario.setText("Bienvenido "+userLogIn.getNombre());
+        
+        Font nuevaFuente = new Font("Georgia", 15);
+        txtUsuario.setFont(nuevaFuente);             
+        
         System.out.println("El usuario que inicio se sesion es ");
         System.out.println(userLogIn.getNombre());
         System.out.println(userLogIn.getUser());
@@ -96,7 +102,6 @@ public class PrincipalContactosController implements Initializable {
                         actualizarLista(listaContactos);
                         visualizador = listaContactos;
                         break;
-
                 }
             }
         });
@@ -161,43 +166,31 @@ public class PrincipalContactosController implements Initializable {
 
             nombre.setOnMouseClicked(eh -> {
                 try {
-                    EditarContactoController.contacto = c;
-                    App.setRoot("editarContacto");
+                    this.visualizador = userLogIn.getContactos();
+                    VisualizadorController.c = c;
+                    App.setRoot("visualizador");
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
             });
         }
-
     }
 
     @FXML
     private void agregarP() throws IOException {
         System.out.println("HOLA MUNDO");
-        App.setRoot("aggPersona");
-        //Button button1 = new Button("Botón A");
-
-        /*
-        for (int i=0; i<10; i++){
-        HBox nuevoContacto = new HBox();
-        Image imagen = new Image("file:imagenes\\logo.png");
-        ImageView imagenContenedor = new ImageView(imagen);
-        imagenContenedor.setFitWidth(20);
-        imagenContenedor.setFitHeight(20);
-        Label nombre = new Label("NUEVO CONTACTO");
-        
-        nuevoContacto.getChildren().addAll(imagenContenedor, nombre);
-        
-        contactos.getChildren().add(nuevoContacto);       
-        }
-         */
+        App.setRoot("aggPersona");        
     }
 
     @FXML
     private void visualizar() throws IOException {
-
-        App.setRoot("visualizador");
-        System.out.println(userLogIn.getContactos());
+        if (userLogIn.getContactos().size()==0) {
+            this.alerta();
+        } else {            
+            this.visualizador = userLogIn.getContactos();    
+            VisualizadorController.c = null;
+            App.setRoot("visualizador");                        
+        }
     }
 
     @FXML
@@ -210,26 +203,9 @@ public class PrincipalContactosController implements Initializable {
     private void agregarE() throws IOException {
         System.out.println("HOLA MUNDO");
         App.setRoot("aggEmpresa");
-        //Button button1 = new Button("Botón A");
-
-        /*
-        for (int i=0; i<10; i++){
-        HBox nuevoContacto = new HBox();
-        Image imagen = new Image("file:imagenes\\logo.png");
-        ImageView imagenContenedor = new ImageView(imagen);
-        imagenContenedor.setFitWidth(20);
-        imagenContenedor.setFitHeight(20);
-        Label nombre = new Label("NUEVO CONTACTO");
-        
-        nuevoContacto.getChildren().addAll(imagenContenedor, nombre);
-        
-        contactos.getChildren().add(nuevoContacto);       
-        }
-         */
     }
 
     private void filtrarLista(String parametro) {
-
         Comparator<Contacto> comparador;
         List<Contacto> nuevaLista = new DoublyCircularLinkedList<>();
         Queue<Contacto> pcola;
@@ -249,9 +225,7 @@ public class PrincipalContactosController implements Initializable {
                         if (apellido == 0) {
                             return nombre;
                         }
-
                         return apellido;
-
                     }
                     return -1;
                 };
@@ -301,9 +275,7 @@ public class PrincipalContactosController implements Initializable {
                 visualizador = filtrada;
 
                 break;
-
         }
-
     }
 
     @FXML
@@ -346,7 +318,6 @@ public class PrincipalContactosController implements Initializable {
         });
         general.getChildren().add(generalText);
         contactos.getChildren().addAll(favoritos,sp, general);
-
     }
 
     private void ajustarAlturaVBox() {
@@ -354,9 +325,15 @@ public class PrincipalContactosController implements Initializable {
     }
 
     private void mostrarFavoritos() {
-
         listaContactos = userLogIn.getFavoritos();
         actualizarLista(listaContactos);
     }
-
+    
+    private void alerta() {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Advertencia!!");
+        alert.setHeaderText(null);
+        alert.setContentText("No hay contactos");       
+        alert.showAndWait();
+    }    
 }

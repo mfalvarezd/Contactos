@@ -10,6 +10,7 @@ import com.espol.app.contactos.modelo.Empresa;
 import com.espol.app.contactos.modelo.Etiqueta;
 import com.espol.app.contactos.modelo.Foto;
 import com.espol.app.contactos.modelo.Persona;
+import com.espol.app.contactos.modelo.Relacion;
 import com.espol.app.contactos.modelo.Tipo;
 import static com.espol.app.contactos.modelo.Tipo.CORREO;
 import static com.espol.app.contactos.modelo.Tipo.DIRECCION;
@@ -50,6 +51,7 @@ import javafx.stage.FileChooser;
  * @author ander
  */
 public class EditarContactoController implements Initializable {
+    
     @FXML
     private VBox contentPrincipal;    
     @FXML
@@ -94,18 +96,19 @@ public class EditarContactoController implements Initializable {
     private VBox default3;
     @FXML
     private ComboBox<Etiqueta> boxEtiqueta;
+    @FXML
+    private VBox contentRelacion;    
     
     private int MAXTELF = 3;
     private int MAXCORREO = 3;
     private int MAXDIC = 3;
     private int MAXFECHA = 3;
     private int MAXREDSOCIAL = 3;    
+    private int MAXRELACION = 3;
     
-    private Usuario usuarioLogeado;
-    
-    static Contacto contacto;
-    List<Foto> fotos = contacto.copy();
-    
+    private Usuario usuarioLogeado;    
+    static Contacto contacto;    
+    List<Foto> fotos = contacto.copy();    
     Foto fotoActual = null;
 
     @Override
@@ -216,7 +219,13 @@ public class EditarContactoController implements Initializable {
                         break;
                 }
             }
-        }                        
+        }
+        
+        List<Relacion> relacionados = contacto.getContactos_relacionados();
+        
+        for (Relacion r : relacionados){
+            this.aggRelacionContacto(r);
+        }
     }
     
     @FXML
@@ -259,11 +268,110 @@ public class EditarContactoController implements Initializable {
             contacto.setEsFavorito(favorito);
 
             // Agregar atributos (teléfonos, correos, direcciones, etc.) al contacto
-            contacto.getAtributos().clear();
+            contacto.getAtributos().clear();            
             this.agregarAtributos(contacto);
+            
+            contacto.getContactos_relacionados().clear();
+            this.agregarRelacionado(contacto);
 
             this.regresar();
         }
+    }
+    
+    private void agregarRelacionado(Contacto contacto) throws IOException {
+        for (int i = 1; i < contentRelacion.getChildren().size(); i++) {
+            Node node = contentRelacion.getChildren().get(i);
+            if (node instanceof HBox) {
+                HBox hbox = (HBox) node;
+                TextField etiqueta = (TextField) hbox.getChildren().get(0);                
+                ComboBox<String> contact = (ComboBox<String>) hbox.getChildren().get(1);
+                String nombre = contact.getValue();
+                
+                for (Contacto c : usuarioLogeado.getContactos()) {
+                    if (!c.isEsEmpresa()) {
+                        Persona p = (Persona) c;
+                        String n = p.getNombre()+" "+p.getApellidos();
+                        if (n.equals(nombre)){
+                            Relacion r = new Relacion (etiqueta.getText(), c);
+                            contacto.addContacto_relacionado(r);                            
+                        }
+                    }                    
+                }
+            }
+        }
+    }
+    
+    @FXML
+    private void aggRelacionC(ActionEvent event) throws IOException {
+        if (MAXRELACION > 0 && usuarioLogeado.getContactos().size()>0) {
+            MAXRELACION--;
+            
+            HBox hb = new HBox();
+            hb.setSpacing(10);
+            
+            TextField tfEtiqueta = new TextField();
+            tfEtiqueta.setPromptText("Etiqueta");            
+            tfEtiqueta.setMaxWidth(60);
+            
+            ComboBox<String> contacts = new ComboBox<String>();
+            contacts.setPromptText("Contactos");
+            
+            for (Contacto c: usuarioLogeado.getContactos()) {
+                if (c.isEsEmpresa()) {
+                    Empresa emp = (Empresa) c;
+                    contacts.getItems().add(emp.getNombre());
+                } else {
+                    Persona p = (Persona) c;
+                    contacts.getItems().add(p.getNombre()+" "+p.getApellidos());
+                }                
+            }
+                        
+            hb.getChildren().addAll(tfEtiqueta, contacts);
+            
+            contentRelacion.getChildren().addAll(hb);
+            
+            ajustarAlturaVBox();
+        }        
+    }
+
+    private void aggRelacionContacto(Relacion r) {
+        if (MAXTELF > 0) {
+            MAXTELF--;
+            
+            HBox hb = new HBox();
+            hb.setSpacing(10);
+            
+            TextField tfEtiqueta = new TextField();
+            tfEtiqueta.setText(r.getT_relacion());
+            tfEtiqueta.setMaxWidth(60);
+            
+            ComboBox<String> contacts = new ComboBox<String>();
+            
+            for (Contacto c: usuarioLogeado.getContactos()) {
+                if (!contacto.equals(c)){
+                    if (c.isEsEmpresa()) {
+                        Empresa emp = (Empresa) c;
+                        contacts.getItems().add(emp.getNombre());
+                    } else {
+                        Persona p = (Persona) c;
+                        contacts.getItems().add(p.getNombre()+" "+p.getApellidos());
+                    }                
+                }
+            }
+            
+            if (!r.getContacto().isEsEmpresa()) {
+                Persona p = (Persona) r.getContacto();
+                contacts.setValue(p.getNombre()+" "+p.getApellidos());                
+            } else {
+                contacts.setValue(r.getContacto().getNombre());
+            }                        
+            
+            hb.getChildren().addAll(tfEtiqueta, contacts);
+            
+            contentRelacion.getChildren().addAll(hb);
+            
+            ajustarAlturaVBox();
+        }        
     }
     
     @FXML
@@ -478,11 +586,7 @@ public class EditarContactoController implements Initializable {
             
             ajustarAlturaVBox();
         }
-    }    
-
-    private void ajustarAlturaVBox() {
-        contentPrincipal.setPrefHeight(contentPrincipal.getPrefHeight() + 20); // Ajusta según sea necesario
-    }    
+    }     
 
     private void agregarAtributos(Contacto contacto) throws IOException {
         // Agregar teléfonos
@@ -567,6 +671,10 @@ public class EditarContactoController implements Initializable {
 
     }    
 
+    private void ajustarAlturaVBox() {
+        contentPrincipal.setPrefHeight(contentPrincipal.getPrefHeight() + 20); // Ajusta según sea necesario
+    }   
+    
     private void alerta() {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Advertencia!!");

@@ -1,9 +1,9 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.espol.app.contactos;
 
+
+import com.espol.app.contactos.App;
+import com.espol.app.contactos.EditarContactoController;
+import static com.espol.app.contactos.VisualizadorController.c;
 import com.espol.app.contactos.modelo.Atributo;
 import com.espol.app.contactos.modelo.Contacto;
 import com.espol.app.contactos.modelo.Foto;
@@ -15,31 +15,30 @@ import static com.espol.app.contactos.modelo.Tipo.DIRECCION;
 import static com.espol.app.contactos.modelo.Tipo.FECHA;
 import static com.espol.app.contactos.modelo.Tipo.REDSOCIAL;
 import static com.espol.app.contactos.modelo.Tipo.TELEFONO;
-import com.espol.app.contactos.modelo.UsuarioSingleton;
 import com.espol.app.contactos.utilidades.List;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Iterator;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+
 /**
  *
  * @author ander
  */
-public class VisualizadorController implements Initializable {
-
+public class VisualizadorRelacionadoController implements Initializable {
     @FXML
     private VBox informacion;
     @FXML
@@ -50,59 +49,28 @@ public class VisualizadorController implements Initializable {
     private Button farmerFoto;
     @FXML
     private Button siguiente;
-    @FXML
-    private Button anterior;    
-    @FXML
-    private Button regresar;     
-
-    private static List<Contacto> contactos = PrincipalContactosController.visualizador;
-    private Foto fotoActual;    
-    public static Contacto c = null;
-
+    
+    private Foto fotoActual;
+    public static Contacto c;
+    protected static Contacto respaldo;
+    
     Label nombre = new Label();
     VBox caja = new VBox();
-    HBox favorito = new HBox();
-    VBox relacionados = new VBox();
-
-
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {        
-        if (!contactos.isEmpty()) {
-            informacion.getChildren().add(2, nombre);
-            informacion.getChildren().add(3, favorito); 
-            informacion.getChildren().add(4, caja);
-            informacion.getChildren().add(5, relacionados);
-
-            if (c == null){
-                c = contactos.get(0);
-                this.actualizar(c);
-            }
+    HBox favorito = new HBox();    
             
-            if (c != null){
-                this.actualizar(c);
-            }
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        informacion.getChildren().add(nombre);        
+        informacion.getChildren().add(favorito);      
+        informacion.getChildren().add(caja);
 
-            siguiente.setOnAction(ev -> {
-                c = contactos.getNext(c);
-                this.actualizar(c);
-            });
-
-            anterior.setOnAction(eh -> {
-                c = contactos.getPrevious(c);
-                this.actualizar(c);
-            });
-        }
-    }
-
-    public void actualizar(Contacto c) {
         if (!c.isEsEmpresa()){
             Persona persona = (Persona) c;
             nombre.setText(persona.getNombre()+" "+persona.getApellidos());
         } else {            
             nombre.setText(c.getNombre());
-        }
+        }        
         
-
         List<Foto> fotos = c.getFotos();
         fotoActual = fotos.get(0);
         
@@ -127,11 +95,10 @@ public class VisualizadorController implements Initializable {
 
         List<Atributo> atributos = c.getAtributos();
         List<Relacion> relaciones = c.getContactos_relacionados();
-
+        
         caja.getChildren().clear();
         caja.setSpacing(10);
-        relacionados.getChildren().clear();
-        
+
         for (Atributo at : atributos) {
             HBox atributosBox = new HBox();
 
@@ -202,47 +169,6 @@ public class VisualizadorController implements Initializable {
                 }
             }
         }
-        
-        if (relaciones.size()>0) {
-            relacionados.getChildren().add(new Label("Contactos Relacionados"));
-        }        
-        
-        for (Relacion r : relaciones) {
-            HBox relacion = new HBox();
-            Label t_relacion = new Label(r.getT_relacion()+" - ");
-            Label contacto; 
-            
-            if (!r.getContacto().isEsEmpresa()) {
-                Persona p = (Persona) r.getContacto();
-                contacto = new Label(p.getNombre()+" "+p.getApellidos());
-            } else {
-                contacto = new Label(r.getContacto().getNombre());
-            }
-            
-            relacion.getChildren().addAll(t_relacion, contacto);
-            relacionados.getChildren().add(relacion);
-            
-            contacto.setOnMouseEntered((event) -> {
-                contacto.setEffect(new DropShadow());
-            });
-            
-            contacto.setOnMouseExited((event) -> {
-                contacto.setEffect(null);
-                contacto.requestFocus();
-            });
-            
-            contacto.setOnMouseClicked(eh -> {
-                try {
-                    VisualizadorRelacionadoController.respaldo = c;
-                    VisualizadorRelacionadoController.c = r.getContacto();
-                    App.setRoot("visualizadorRelacionado");
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-            });
-            nombre.setPadding(new Insets(7, 0, 0, 0));                                    
-        }
-        
         boolean esFavorito = c.isEsFavorito();
 
         favorito.getChildren().clear();
@@ -257,32 +183,17 @@ public class VisualizadorController implements Initializable {
             favoritoView.setFitHeight(40);
             favoritoView.setFitWidth(40);
             favorito.getChildren().add(favoritoView);
-        }
+        }        
     }
     
-    private void alertaeliminar() {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Acción completada");
-        alert.setHeaderText(null);
-        alert.setContentText("El contacto fue eliminado de la lista");       
-        alert.showAndWait();
-    } 
-    
-    @FXML
-    private void eliminarcontacto(ActionEvent event) throws IOException{
-        contactos.remove(c);     
-        this.alertaeliminar();
-        App.setRoot("principalContactos");
-    }
-        
     @FXML
     private void regresar() throws IOException {
-        App.setRoot("principalContactos");
-    }
+        VisualizadorController.c = respaldo;
+        App.setRoot("visualizador");
+    }    
 
     @FXML
-    private void editarContacto(ActionEvent event) throws IOException {
-        EditarContactoController.contacto = c;
-        App.setRoot("editarContacto");         
-    }
+    private void eliminarRelacionado(ActionEvent event) throws IOException {
+        System.out.println("+++++++++++++++ELIMINAR+++++++++++++++++");         
+    }    
 }

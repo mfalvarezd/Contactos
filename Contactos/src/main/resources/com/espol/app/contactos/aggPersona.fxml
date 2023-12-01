@@ -13,9 +13,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="588.0" prefWidth="338.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.espol.app.contactos.AggPersonaController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="588.0" prefWidth="338.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.espol.app.contactos.AggPersonaController">
    <children>
-      <ScrollPane fx:id="scrollPane" fitToHeight="true" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="588.0" prefWidth="338.0">
+      <ScrollPane fx:id="scrollPane" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="588.0" prefWidth="338.0">
          <content>
             <VBox fx:id="contentPrincipal" alignment="TOP_CENTER" fillWidth="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="586.0" prefWidth="335.0" spacing="10.0">
                <children>
@@ -58,12 +58,12 @@
                         </VBox>
                      </children>
                   </HBox>
-                  <VBox fx:id="default3" prefHeight="64.0" prefWidth="212.0" spacing="10.0">
+                  <HBox fx:id="default3" prefHeight="30.0" prefWidth="279.0">
                      <children>
                         <TextField fx:id="tfNombre" promptText="Nombre" />
                         <TextField fx:id="tftApellido" promptText="Apellidos" />
                      </children>
-                  </VBox>
+                  </HBox>
                   <VBox fx:id="contentTelf" alignment="TOP_CENTER" prefHeight="37.0" prefWidth="279.0">
                      <children>
                         <HBox prefHeight="28.0" prefWidth="343.0">
@@ -137,6 +137,20 @@
                         </HBox>
                      </children>
                   </VBox>
+                  <VBox fx:id="contentRelacion" alignment="TOP_CENTER" prefHeight="37.0" prefWidth="279.0">
+                     <children>
+                        <HBox prefHeight="28.0" prefWidth="343.0">
+                           <children>
+                              <ImageView fitHeight="26.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../../../icons/mas.png" />
+                                 </image>
+                              </ImageView>
+                              <Button fx:id="btnContacRela" alignment="TOP_LEFT" contentDisplay="CENTER" mnemonicParsing="false" onAction="#aggRelacionC" prefHeight="22.0" prefWidth="318.0" text="Agregar Contacto de Relación" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
                </children>
                <padding>
                   <Insets left="10.0" right="10.0" top="10.0" />
@@ -146,3 +160,4 @@
       </ScrollPane>
    </children>
 </Pane>
+

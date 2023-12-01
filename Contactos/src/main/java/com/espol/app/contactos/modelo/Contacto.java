@@ -17,17 +17,17 @@ public class Contacto implements Serializable{
     private String nombre;  
     private List<Atributo> atributos;
     private List<Foto> fotos;
-    private List<Contacto> contactos_relacionados;
+    private List<Relacion> contactos_relacionados;
     private boolean esFavorito;
     private String descripcion;
-    private boolean esEmpresa;
-    
+    private boolean esEmpresa;    
     private Etiqueta etiqueta;
 
     public Contacto() {
         this.atributos = new ArrayList<>();
         this.fotos = new DoublyCircularLinkedList<>();
         this.esFavorito = false;
+        this.contactos_relacionados = new ArrayList<>();
     }
 
     public List<Atributo> getAtributos() {
@@ -46,11 +46,11 @@ public class Contacto implements Serializable{
         this.fotos = fotos;
     }
 
-    public List<Contacto> getContactos_relacionados() {
+    public List<Relacion> getContactos_relacionados() {
         return contactos_relacionados;
     }
 
-    public void setContactos_relacionados(List<Contacto> contactos_relacionados) {
+    public void setContactos_relacionados(List<Relacion> contactos_relacionados) {
         this.contactos_relacionados = contactos_relacionados;
     }
 
@@ -80,6 +80,10 @@ public class Contacto implements Serializable{
 
     public void addAtributo(Atributo a){
         this.atributos.add(a);
+    }
+    
+    public boolean addContacto_relacionado(Relacion relacion) {
+        return this.contactos_relacionados.add(relacion);
     }
 
     @Override

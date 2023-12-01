@@ -137,6 +137,20 @@
                         </HBox>
                      </children>
                   </VBox>
+                  <VBox fx:id="contentRelacion" alignment="TOP_CENTER" prefHeight="37.0" prefWidth="279.0">
+                     <children>
+                        <HBox prefHeight="28.0" prefWidth="343.0">
+                           <children>
+                              <ImageView fitHeight="26.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../../../icons/mas.png" />
+                                 </image>
+                              </ImageView>
+                              <Button fx:id="btnContacRela" alignment="TOP_LEFT" contentDisplay="CENTER" mnemonicParsing="false" onAction="#aggRelacionC" prefHeight="22.0" prefWidth="318.0" text="Agregar Contacto de Relación" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
                </children>
                <padding>
                   <Insets left="10.0" right="10.0" top="10.0" />

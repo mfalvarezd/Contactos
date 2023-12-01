@@ -7,13 +7,16 @@ package com.espol.app.contactos;
 //import com.espol.app.contactos.utilidades.List;
 import com.espol.app.contactos.modelo.Atributo;
 import com.espol.app.contactos.modelo.Contacto;
+import com.espol.app.contactos.modelo.Empresa;
 import com.espol.app.contactos.modelo.Etiqueta;
 import com.espol.app.contactos.modelo.Foto;
 import com.espol.app.contactos.modelo.Persona;
+import com.espol.app.contactos.modelo.Relacion;
 
 import com.espol.app.contactos.modelo.Tipo;
 import com.espol.app.contactos.modelo.Usuario;
 import com.espol.app.contactos.modelo.UsuarioSingleton;
+import com.espol.app.contactos.utilidades.List;
 import com.espol.app.contactos.utilidades.ArrayList;
 import com.espol.app.contactos.utilidades.DoublyCircularLinkedList;
 import com.espol.app.contactos.utilidades.ManejoArchivos;
@@ -23,7 +26,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
+import java.util.Comparator;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
@@ -90,29 +93,35 @@ public class AggPersonaController implements Initializable {
     @FXML
     private Button btnFecha;
     @FXML
+    private Button btnContacRela;
+    @FXML
     private HBox default1;
     @FXML
     private HBox default2;
     @FXML
-    private VBox default3;
+    private HBox default3;
     @FXML
     private CheckBox esFavorito;
     @FXML
     private Button btnEliminarFoto;
     @FXML
     private ComboBox<Etiqueta> boxEtiqueta;
-
-    private int MAXTELF = 3;
-    private int MAXCORREO = 3;
-    private int MAXDIC = 3;
-    private int MAXFECHA = 3;
-    private int MAXREDSOCIAL = 3;
     @FXML
     private VBox contentRedSocial;
     @FXML
     private Button btnRedSocial;
     @FXML
     private ScrollPane scrollPane;
+    @FXML
+    private VBox contentRelacion;
+    
+    private int MAXTELF = 3;
+    private int MAXCORREO = 3;
+    private int MAXDIC = 3;
+    private int MAXFECHA = 3;
+    private int MAXREDSOCIAL = 3;
+    private int MAXRELACION = 3;
+    
     private Usuario usuarioLogeado;
 
     private DoublyCircularLinkedList<Foto> fotos = new DoublyCircularLinkedList<Foto>();
@@ -154,16 +163,21 @@ public class AggPersonaController implements Initializable {
     private void aggTelf(ActionEvent event) {
         if (MAXTELF > 0) {
             MAXTELF--;
-            HBox hb = new HBox();
+            
+            HBox hb = new HBox();            
             hb.setSpacing(10);
+            
             TextField tfEtiqueta = new TextField();
-
             tfEtiqueta.setPromptText("Etiqueta");
             tfEtiqueta.setMaxWidth(60);
+            
             TextField telefono = new TextField();
             telefono.setPromptText("Telefono");
+            
             hb.getChildren().addAll(tfEtiqueta, telefono);
+            
             contentTelf.getChildren().addAll(hb);            
+            
             ajustarAlturaVBox();
         }
     }
@@ -260,10 +274,6 @@ public class AggPersonaController implements Initializable {
         }
     }
 
-    private void ajustarAlturaVBox() {
-        contentPrincipal.setPrefHeight(contentPrincipal.getPrefHeight() + 25); // Ajusta según sea necesario
-    }
-
     @FXML
     private void regresar() throws IOException {
         ManejoArchivos.guardarDatos(usuarioLogeado);
@@ -277,8 +287,7 @@ public class AggPersonaController implements Initializable {
     }
 
     @FXML
-    private void agregarContacto(ActionEvent event) throws IOException {
-        
+    private void agregarContacto(ActionEvent event) throws IOException {        
         if (fotos.size()<2) {
             this.alerta();
         } else {
@@ -301,6 +310,8 @@ public class AggPersonaController implements Initializable {
 
             nuevoContacto.setEsFavorito(favorito);
 
+            this.agregarRelacionado(nuevoContacto);
+            
             // Agregar atributos (teléfonos, correos, direcciones, etc.) al contacto
             this.agregarAtributos(nuevoContacto);
 
@@ -310,6 +321,29 @@ public class AggPersonaController implements Initializable {
         }
     }
 
+    private void agregarRelacionado(Contacto contacto) throws IOException {
+        for (int i = 1; i < contentRelacion.getChildren().size(); i++) {
+            Node node = contentRelacion.getChildren().get(i);
+            if (node instanceof HBox) {
+                HBox hbox = (HBox) node;
+                TextField etiqueta = (TextField) hbox.getChildren().get(0);                
+                ComboBox<String> contact = (ComboBox<String>) hbox.getChildren().get(1);
+                String nombre = contact.getValue();
+                
+                for (Contacto c : usuarioLogeado.getContactos()) {
+                    if (!c.isEsEmpresa()) {
+                        Persona p = (Persona) c;
+                        String n = p.getNombre()+" "+p.getApellidos();
+                        if (n.equals(nombre)){
+                            Relacion r = new Relacion (etiqueta.getText(), c);
+                            contacto.addContacto_relacionado(r);                            
+                        }
+                    }                    
+                }
+            }
+        }
+    }
+    
     private void agregarAtributos(Contacto contacto) throws IOException {
         // Agregar teléfonos
         for (int i = 1; i < contentTelf.getChildren().size(); i++) {
@@ -390,6 +424,43 @@ public class AggPersonaController implements Initializable {
                 }
             }
         }
+    }
+    
+    @FXML
+    private void aggRelacionC(ActionEvent event) throws IOException {
+        if (MAXRELACION > 0 && usuarioLogeado.getContactos().size()>0) {
+            MAXRELACION--;
+            
+            HBox hb = new HBox();
+            hb.setSpacing(10);
+            
+            TextField tfEtiqueta = new TextField();
+            tfEtiqueta.setPromptText("Etiqueta");            
+            tfEtiqueta.setMaxWidth(60);
+            
+            ComboBox<String> contacts = new ComboBox<>();
+            contacts.setPromptText("Contactos");
+            
+            for (Contacto c: usuarioLogeado.getContactos()) {
+                if (c.isEsEmpresa()) {
+                    Empresa emp = (Empresa) c;
+                    contacts.getItems().add(emp.getNombre());
+                } else {
+                    Persona p = (Persona) c;
+                    contacts.getItems().add(p.getNombre()+" "+p.getApellidos());
+                }                
+            }
+                        
+            hb.getChildren().addAll(tfEtiqueta, contacts);
+            
+            contentRelacion.getChildren().addAll(hb);
+            
+            ajustarAlturaVBox();
+        }        
+    }
+    
+    private void ajustarAlturaVBox() {
+        contentPrincipal.setPrefHeight(contentPrincipal.getPrefHeight() + 20); // Ajusta según sea necesario
     }
     
     private void alerta() {
