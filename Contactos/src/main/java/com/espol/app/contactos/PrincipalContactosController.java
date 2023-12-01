@@ -50,8 +50,6 @@ public class PrincipalContactosController implements Initializable {
     @FXML
     private Button salir;
     @FXML
-    private TextField txtBuscar;
-    @FXML
     private ComboBox<String> cmbFiltros;
 
     private static Usuario userLogIn;
@@ -175,7 +173,7 @@ public class PrincipalContactosController implements Initializable {
 
             nombre.setOnMouseClicked(eh -> {
                 try {
-                    this.visualizador = userLogIn.getContactos();
+                    //this.visualizador = userLogIn.getContactos();
                     VisualizadorController.c = c;
                     App.setRoot("visualizador");
                 } catch (IOException ex) {
@@ -196,7 +194,12 @@ public class PrincipalContactosController implements Initializable {
         if (userLogIn.getContactos().size() == 0) {
             this.alerta();
         } else {
-            this.visualizador = userLogIn.getContactos();
+            if(this.visualizador==null){
+                this.visualizador = userLogIn.getContactos();
+            }else{
+               
+            }
+            
             VisualizadorController.c = null;
             App.setRoot("visualizador");
         }
@@ -404,6 +407,7 @@ public class PrincipalContactosController implements Initializable {
 
     private void mostrarFavoritos() {
         listaContactos = userLogIn.getFavoritos();
+        visualizador = listaContactos;
         actualizarLista(listaContactos);
     }
 

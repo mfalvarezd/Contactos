@@ -7,13 +7,12 @@
 <?import javafx.scene.control.MenuButton?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="588.0" prefWidth="338.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.espol.app.contactos.PrincipalContactosController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="588.0" prefWidth="338.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.espol.app.contactos.PrincipalContactosController">
    <children>
       <VBox alignment="TOP_CENTER" fillWidth="false" prefHeight="588.0" prefWidth="338.0">
          <children>
@@ -26,7 +25,7 @@
                               <Font name="Georgia Bold" size="29.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="txtBuscar" promptText="Buscar" />
+                        <Button mnemonicParsing="false" onAction="#listas" text="&lt; Listas" />
                         <HBox prefHeight="100.0" prefWidth="200.0">
                            <children>
                               <ComboBox fx:id="cmbFiltros" onAction="#Filtrar" prefWidth="150.0" promptText="Filtrar por:" />
@@ -49,7 +48,6 @@
                               <Font name="System Bold" size="15.0" />
                            </font>
                         </MenuButton>
-                        <Button mnemonicParsing="false" onAction="#listas" text="&lt; Listas" />
                      </children>
                   </VBox>
                </children>
