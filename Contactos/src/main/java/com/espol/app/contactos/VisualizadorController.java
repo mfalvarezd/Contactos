@@ -201,6 +201,7 @@ public class VisualizadorController implements Initializable {
                         break;
                 }
             }
+            this.ajustarAlturaVBox();
         }
         
         if (relaciones.size()>0) {
@@ -240,7 +241,8 @@ public class VisualizadorController implements Initializable {
                     ex.printStackTrace();
                 }
             });
-            nombre.setPadding(new Insets(7, 0, 0, 0));                                    
+            nombre.setPadding(new Insets(7, 0, 0, 0));   
+            this.ajustarAlturaVBox();
         }
         
         boolean esFavorito = c.isEsFavorito();
@@ -258,6 +260,7 @@ public class VisualizadorController implements Initializable {
             favoritoView.setFitWidth(40);
             favorito.getChildren().add(favoritoView);
         }
+        this.ajustarAlturaVBox();
     }
     
     private void alertaeliminar() {
@@ -285,4 +288,8 @@ public class VisualizadorController implements Initializable {
         EditarContactoController.contacto = c;
         App.setRoot("editarContacto");         
     }
+    
+    private void ajustarAlturaVBox() {
+        informacion.setPrefHeight(informacion.getPrefHeight()+2); // Ajusta según sea necesario
+    }    
 }
