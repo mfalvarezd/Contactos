@@ -259,11 +259,12 @@ public class VisualizadorController implements Initializable {
         alert.showAndWait();
     } 
     @FXML
-    private void eliminarcontacto(ActionEvent event){
+    private void eliminarcontacto(ActionEvent event) throws IOException{
         contactos.remove(c);     
         this.alertaeliminar();
+        App.setRoot("principalContactos");
     }
-    
+        
     @FXML
     private void regresar() throws IOException {
         App.setRoot("principalContactos");
