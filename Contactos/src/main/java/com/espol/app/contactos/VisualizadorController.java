@@ -251,7 +251,19 @@ public class VisualizadorController implements Initializable {
         // Cargar el mapa en el WebView
         webEngine.load(mapUrl);*/
     }
-
+    private void alertaeliminar() {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Acción completada");
+        alert.setHeaderText(null);
+        alert.setContentText("El contacto fue eliminado de la lista");       
+        alert.showAndWait();
+    } 
+    @FXML
+    private void eliminarcontacto(ActionEvent event){
+        contactos.remove(c);     
+        this.alertaeliminar();
+    }
+    
     @FXML
     private void regresar() throws IOException {
         App.setRoot("principalContactos");
